@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="375" height="812" viewBox="0 0 375 812" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark Background -->
+  <rect width="375" height="812" fill="#0F172A"/>
+  
+  <!-- Status Bar -->
+  <rect width="375" height="44" fill="#1E293B"/>
+  
+  <!-- Header -->
+  <g transform="translate(0, 44)">
+    <rect width="375" height="60" fill="#1E293B"/>
+    <text x="187" y="35" fill="white" font-family="Arial" font-size="18" text-anchor="middle">تنظیمات</text>
+  </g>
+  
+  <!-- Settings Items -->
+  <g transform="translate(16, 120)">
+    <!-- Profile Setting -->
+    <rect width="343" height="72" rx="12" fill="#1E293B"/>
+    <text x="280" y="42" fill="white" font-family="Arial" font-size="16">پروفایل کاربری</text>
+    
+    <!-- Language Setting -->
+    <g transform="translate(0, 88)">
+      <rect width="343" height="72" rx="12" fill="#1E293B"/>
+      <text x="280" y="42" fill="white" font-family="Arial" font-size="16">زبان</text>
+    </g>
+    
+    <!-- Theme Setting -->
+    <g transform="translate(0, 176)">
+      <rect width="343" height="72" rx="12" fill="#1E293B"/>
+      <text x="280" y="42" fill="white" font-family="Arial" font-size="16">تم و ظاهر</text>
+    </g>
+    
+    <!-- Notifications Setting -->
+    <g transform="translate(0, 264)">
+      <rect width="343" height="72" rx="12" fill="#1E293B"/>
+      <text x="280" y="42" fill="white" font-family="Arial" font-size="16">اعلان‌ها</text>
+    </g>
+  </g>
+</svg> 

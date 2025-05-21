@@ -1,0 +1,116 @@
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #FF8301;
+  --primary-dark: #e06800;
+  --primary-light: #ff9933;
+  --secondary: #10192b;
+  --secondary-dark: #0c1321;
+  --secondary-light: #1a2540;
+  --accent: #57DCDA;
+  --lime: #2dee59;
+  --purple: #9d4edd;
+  --orange: #ffaa00;
+  --text-light: #F5F5F7;
+  --text-dark: #333;
+  --background: #10192b;
+  --gradient-primary: linear-gradient(135deg, #FF8301 0%, #57DCDA 100%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  direction: rtl;
+  font-family: 'Vazirmatn', sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-light);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* RTL specific styles */
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+@layer components {
+  .container {
+    @apply px-4 mx-auto w-full max-w-7xl;
+  }
+  
+  .btn {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium transition-all duration-300;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-dark;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-primary text-primary hover:bg-primary/10;
+  }
+  
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-l from-primary to-accent;
+  }
+  
+  .gradient-lime {
+    @apply bg-clip-text text-transparent bg-gradient-to-l from-lime to-primary;
+  }
+  
+  .gradient-purple {
+    @apply bg-clip-text text-transparent bg-gradient-to-l from-purple to-primary;
+  }
+  
+  .gradient-orange {
+    @apply bg-clip-text text-transparent bg-gradient-to-l from-orange to-primary;
+  }
+  
+  .section-title {
+    @apply text-4xl md:text-5xl font-display font-bold mb-4;
+  }
+  
+  /* Card with glass effect */
+  .glass-card {
+    @apply bg-secondary/60 backdrop-blur-lg border border-white/10 rounded-2xl;
+  }
+  
+  /* Glowing effect */
+  .glow {
+    @apply relative;
+  }
+  
+  .glow::after {
+    content: '';
+    @apply absolute -z-10 w-full h-full rounded-2xl blur-2xl opacity-40 bg-primary/30;
+  }
+}
+
+/* Animation utilities */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Responsive adjustments for RTL */
+@media (max-width: 768px) {
+  .rtl-mobile-reverse {
+    flex-direction: row-reverse;
+  }
+}

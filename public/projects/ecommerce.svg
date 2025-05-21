@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="400" viewBox="0 0 600 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="400" fill="#1E293B"/>
+  
+  <!-- Mobile Phone Frame -->
+  <g transform="translate(175,25)">
+    <rect width="250" height="350" rx="30" fill="#0F172A"/>
+    <rect x="10" y="10" width="230" height="330" rx="20" fill="#2D3748"/>
+    
+    <!-- App Content -->
+    <!-- Header -->
+    <rect x="10" y="10" width="230" height="60" rx="20" fill="#0F172A"/>
+    <text x="125" y="45" fill="white" font-family="Arial" font-size="18" text-anchor="middle">فروشگاه آنلاین</text>
+    
+    <!-- Product Grid -->
+    <g transform="translate(20,80)">
+      <!-- Product 1 -->
+      <rect width="100" height="120" rx="10" fill="#0F172A"/>
+      <rect y="90" width="100" height="30" rx="10" fill="#3AADAB" opacity="0.8"/>
+      
+      <!-- Product 2 -->
+      <rect x="110" width="100" height="120" rx="10" fill="#0F172A"/>
+      <rect x="110" y="90" width="100" height="30" rx="10" fill="#3AADAB" opacity="0.8"/>
+      
+      <!-- Product 3 -->
+      <rect y="130" width="100" height="120" rx="10" fill="#0F172A"/>
+      <rect y="220" width="100" height="30" rx="10" fill="#3AADAB" opacity="0.8"/>
+      
+      <!-- Product 4 -->
+      <rect x="110" y="130" width="100" height="120" rx="10" fill="#0F172A"/>
+      <rect x="110" y="220" width="100" height="30" rx="10" fill="#3AADAB" opacity="0.8"/>
+    </g>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <circle cx="100" cy="200" r="40" fill="#3AADAB" opacity="0.2"/>
+  <circle cx="500" cy="200" r="40" fill="#3AADAB" opacity="0.2"/>
+</svg> 

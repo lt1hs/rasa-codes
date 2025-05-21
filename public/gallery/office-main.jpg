@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="600" fill="#0f1f38"/>
+  
+  <!-- Grid Pattern -->
+  <pattern id="grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#57DCDA" stroke-width="0.5" stroke-opacity="0.1"/>
+  </pattern>
+  <rect width="800" height="600" fill="url(#grid)"/>
+  
+  <!-- Gradient Overlay -->
+  <rect width="800" height="600" fill="url(#gradient)" opacity="0.4"/>
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#57DCDA" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#3AADAB" stop-opacity="0.2"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Decorative Elements -->
+  <circle cx="400" cy="300" r="150" stroke="#57DCDA" stroke-width="1" stroke-opacity="0.2"/>
+  <circle cx="400" cy="300" r="100" stroke="#57DCDA" stroke-width="1" stroke-opacity="0.3"/>
+  <circle cx="400" cy="300" r="50" stroke="#57DCDA" stroke-width="1" stroke-opacity="0.4"/>
+  
+  <!-- Abstract Lines -->
+  <path d="M 200 300 L 600 300" stroke="#57DCDA" stroke-width="1" stroke-opacity="0.2"/>
+  <path d="M 400 100 L 400 500" stroke="#57DCDA" stroke-width="1" stroke-opacity="0.2"/>
+  
+  <!-- Center Icon Placeholder -->
+  <g transform="translate(350,250)">
+    <rect width="100" height="100" fill="none" stroke="#57DCDA" stroke-width="2"/>
+  </g>
+</svg> 
