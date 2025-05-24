@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logoHorizontal from '../../assets/main-r-wed.png';
 
 const Header = () => {
@@ -8,10 +8,12 @@ const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState('خانه');
   const headerRef = useRef(null);
+  const location = useLocation();
 
   const { scrollY } = useScroll();
-  const headerOpacity = useTransform(scrollY, [0, 100], [0.9, 1]);
-  const headerBackdrop = useTransform(scrollY, [0, 100], ['blur(8px)', 'blur(16px)']);
+  const headerOpacity = useTransform(scrollY, [0, 100], [0.95, 1]);
+  const headerBackdrop = useTransform(scrollY, [0, 100], ['blur(10px)', 'blur(20px)']);
+  const headerScale = useTransform(scrollY, [0, 100], [1, 0.98]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +24,15 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Update active item based on current route
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const currentNavItem = navItems.find(item => item.href === currentPath);
+    if (currentNavItem) {
+      setActiveItem(currentNavItem.name);
+    }
+  }, [location]);
+
   const navItems = [
     { name: 'خانه', href: '/' },
     { name: 'درباره ما', href: '/about' },
@@ -29,72 +40,73 @@ const Header = () => {
     { name: 'پروژه‌ها', href: '/projects' },
     { name: 'گالری', href: '/gallery' },
     { name: 'وبلاگ', href: '/blog' },
-    { name: 'قیمت‌ها', href: '/pricing' },
+    // { name: 'قیمت‌ها', href: '/pricing' },
     { name: 'تماس با ما', href: '/contact' }
   ];
 
   return (
     <motion.header 
       ref={headerRef}
-      className="fixed top-0 right-0 left-0 z-50 transition-all duration-300"
+      className="fixed top-0 right-0 left-0 z-50"
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      style={{ scale: headerScale }}
     >
       {/* Enhanced background with gradient and blur */}
       <motion.div 
-        className={`absolute inset-0 ${isScrolled ? 'border-b border-white/10' : ''}`}
+        className={`absolute inset-0 ${isScrolled ? 'border-b border-white/5' : ''}`}
         style={{
           opacity: headerOpacity,
           backdropFilter: headerBackdrop,
           background: isScrolled 
-            ? 'linear-gradient(to right, rgba(13, 13, 20, 0.85), rgba(20, 20, 35, 0.9))'
-            : 'linear-gradient(to right, rgba(13, 13, 20, 0.7), rgba(20, 20, 35, 0.75))',
+            ? 'rgba(17, 23, 31, 0.95)'
+            : 'rgba(17, 23, 31, 0.85)',
         }}
       >
-        {/* Animated gradient overlay */}
+        {/* Subtle overlay */}
         <motion.div 
-          className="absolute inset-0 opacity-30"
+          className="absolute inset-0 opacity-20"
           style={{
-            background: 'linear-gradient(90deg, transparent, rgba(87, 220, 218, 0.1), transparent)',
-            backgroundSize: '200% 100%',
-          }}
-          animate={{
-            backgroundPosition: ['200% 0', '-200% 0'],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "linear",
+            background: 'rgba(47, 214, 234, 0.01)',
           }}
         />
       </motion.div>
 
-      <div className="container relative z-10 flex items-center justify-between py-3.5">
+      <div className="container relative z-10 flex items-center justify-between py-4">
         {/* Enhanced Logo */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="flex items-center gap-3 relative group"
           whileHover={{ scale: 1.02 }}
         >
           <Link to="/" className="relative">
             <motion.div
-              className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-accent/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg"
+              className="absolute -inset-3 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0, 0.5, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
             />
-            <img src={logoHorizontal} alt="RASA Logo" className="h-9 md:h-10 relative" />
+            <img src={logoHorizontal} alt="RASA Logo" className="h-10 md:h-11 relative" />
           </Link>
         </motion.div>
 
         {/* Enhanced Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-7">
           <motion.div
-            className="flex items-center bg-white/5 backdrop-blur-md rounded-full px-1.5 py-1.5 border border-white/10"
+            className="flex items-center bg-white/[0.03] backdrop-blur-2xl rounded-full px-1.5 py-1.5 border border-white/[0.08] shadow-lg shadow-black/5"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            whileHover={{ boxShadow: '0 0 20px rgba(87, 220, 218, 0.1)' }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={{ boxShadow: '0 0 30px rgba(99, 220, 255, 0.1)' }}
           >
             <motion.ul 
               className="flex items-center"
@@ -111,17 +123,17 @@ const Header = () => {
                 >
                   <Link 
                     to={item.href} 
-                    className={`font-medium py-1.5 px-4 transition-all duration-300 relative rounded-full ${
+                    className={`font-medium py-2 px-4 transition-all duration-300 relative rounded-full ${
                       activeItem === item.name 
-                        ? 'text-white bg-gradient-to-r from-primary to-accent shadow-lg' 
-                        : 'text-white/90 hover:text-white hover:bg-white/10'
+                        ? 'text-white bg-[#2FD6EA] shadow-sm shadow-[#2FD6EA]/10' 
+                        : 'text-white/80 hover:text-white hover:bg-white/[0.02]'
                     }`}
                     onClick={() => setActiveItem(item.name)}
                   >
                     {item.name}
                     {activeItem === item.name && (
                       <motion.div
-                        className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-accent opacity-50 blur-sm -z-10"
+                        className="absolute inset-0 rounded-full bg-[#2FD6EA] opacity-30 blur-[2px] -z-10"
                         layoutId="activeBackground"
                         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                       />
@@ -136,14 +148,14 @@ const Header = () => {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="flex gap-3"
           >
             <Link 
               to="/login" 
-              className="relative group px-5 py-2 overflow-hidden rounded-full border border-white/20 transition-all duration-300"
+              className="relative group px-6 py-2.5 overflow-hidden rounded-full border border-white/[0.08] transition-all duration-300 bg-white/[0.02]"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <span className="relative z-10 text-white/90 group-hover:text-white transition-colors duration-300">
                 ورود
               </span>
@@ -151,9 +163,9 @@ const Header = () => {
             
             <Link 
               to="/signup" 
-              className="relative group px-5 py-2 overflow-hidden rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="relative group px-6 py-2.5 overflow-hidden rounded-full bg-[#2FD6EA] transition-all duration-300 shadow-sm shadow-[#2FD6EA]/10 hover:shadow-md hover:shadow-[#2FD6EA]/15"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <span className="relative z-10 text-white font-medium">
                 شروع رایگان
               </span>
@@ -164,7 +176,7 @@ const Header = () => {
         {/* Enhanced Mobile Menu Button */}
         <div className="md:hidden">
           <motion.button 
-            className="relative p-2 overflow-hidden rounded-full group bg-gradient-to-r from-primary/10 to-accent/10 border border-white/10"
+            className="relative p-2.5 overflow-hidden rounded-full group bg-white/[0.02] border border-white/[0.05]"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -185,8 +197,8 @@ const Header = () => {
               </svg>
             </span>
             <motion.div 
-              className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100"
-              transition={{ duration: 0.2 }}
+              className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-0 group-hover:opacity-100"
+              transition={{ duration: 0.3 }}
             />
           </motion.button>
         </div>
@@ -196,24 +208,24 @@ const Header = () => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div 
-            className="md:hidden absolute top-full right-0 left-0 backdrop-blur-xl border-t border-white/10"
+            className="md:hidden absolute top-full right-0 left-0 backdrop-blur-2xl border-t border-white/[0.08]"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             style={{
-              background: 'linear-gradient(to bottom, rgba(13, 13, 20, 0.95), rgba(20, 20, 35, 0.9))',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)'
+              background: 'linear-gradient(to bottom, rgba(10, 10, 18, 0.98), rgba(15, 15, 30, 0.95))',
+              boxShadow: '0 15px 40px rgba(0, 0, 0, 0.3)'
             }}
           >
-            <div className="container py-5">
+            <div className="container py-6">
               <motion.ul 
                 className="flex flex-col gap-3"
                 initial="closed"
                 animate="open"
                 exit="closed"
                 variants={{
-                  open: { transition: { staggerChildren: 0.07, delayChildren: 0.2 } },
+                  open: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
                   closed: { transition: { staggerChildren: 0.05, staggerDirection: -1 } }
                 }}
               >
@@ -224,14 +236,14 @@ const Header = () => {
                       open: { opacity: 1, y: 0 },
                       closed: { opacity: 0, y: -10 }
                     }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <Link 
                       to={item.href} 
-                      className={`block py-2 px-4 font-medium transition-all duration-300 rounded-full relative overflow-hidden ${
+                      className={`block py-2.5 px-4 font-medium transition-all duration-300 rounded-full relative overflow-hidden ${
                         activeItem === item.name 
-                          ? 'text-white bg-gradient-to-r from-primary to-accent shadow-md' 
-                          : 'text-white/90 hover:text-white hover:bg-white/10'
+                          ? 'text-white bg-[#2FD6EA] shadow-sm shadow-[#2FD6EA]/10' 
+                          : 'text-white/80 hover:text-white hover:bg-white/[0.02]'
                       }`}
                       onClick={() => {
                         setActiveItem(item.name);
@@ -239,7 +251,7 @@ const Header = () => {
                       }}
                     >
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 opacity-0 hover:opacity-100 transition-opacity duration-300"
+                        className="absolute inset-0 bg-[#2FD6EA] opacity-0 hover:opacity-100 transition-opacity duration-500"
                       />
                       <span className="relative z-10">{item.name}</span>
                     </Link>
@@ -247,7 +259,7 @@ const Header = () => {
                 ))}
 
                 {/* Mobile Action Buttons */}
-                <div className="flex flex-col gap-3 mt-4">
+                <div className="flex flex-col gap-3 mt-5">
                   <motion.div
                     variants={{
                       open: { opacity: 1, y: 0 },
@@ -256,7 +268,7 @@ const Header = () => {
                   >
                     <Link 
                       to="/login" 
-                      className="block py-2 px-4 text-center rounded-full border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all duration-300"
+                      className="block py-2.5 px-4 text-center rounded-full border border-white/[0.08] hover:border-white/20 hover:bg-white/[0.03] transition-all duration-300 bg-white/[0.02]"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       ورود
@@ -270,7 +282,7 @@ const Header = () => {
                   >
                     <Link 
                       to="/signup" 
-                      className="block py-2 px-4 text-center rounded-full bg-gradient-to-r from-primary to-accent hover:shadow-lg transition-all duration-300"
+                      className="block py-2.5 px-4 text-center rounded-full bg-[#2FD6EA] hover:shadow-md shadow-[#2FD6EA]/10 transition-all duration-300"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       شروع رایگان

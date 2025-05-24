@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 
 const AboutSection = () => {
@@ -10,17 +10,18 @@ const AboutSection = () => {
   });
 
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 1, 0.3]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.3, 1, 1, 0.3]);
+  const scale = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.95, 1, 1, 0.95]);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
 
   const stats = [
-    { number: '+100', label: 'پروژه موفق', icon: '🚀' },
-    { number: '+50', label: 'مشتری راضی', icon: '✨' },
-    { number: '+10', label: 'سال تجربه', icon: '⚡' },
-    { number: '+20', label: 'متخصص فنی', icon: '💡' }
+    { number: '+100', label: 'پروژه موفق', icon: '🚀', color: 'from-[#57DCDA] to-[#3AADAB]' },
+    { number: '+50', label: 'مشتری راضی', icon: '✨', color: 'from-[#FF8301] to-[#FFB21A]' },
+    { number: '+10', label: 'سال تجربه', icon: '⚡', color: 'from-[#9D4EDD] to-[#6C3BBB]' },
+    { number: '+20', label: 'متخصص فنی', icon: '💡', color: 'from-[#2DEE59] to-[#1AB83C]' }
   ];
 
   const achievements = [
@@ -55,52 +56,72 @@ const AboutSection = () => {
   ];
 
   const techCapabilities = [
-    { title: 'هوش مصنوعی', description: 'راهکارهای هوشمند پیشرفته', progress: 95 },
-    { title: 'تحلیل داده', description: 'بینش‌های تحلیلی عمیق', progress: 90 },
-    { title: 'امنیت سایبری', description: 'حفاظت پیشرفته', progress: 88 },
-    { title: 'رایانش ابری', description: 'راهکارهای ابری انعطاف‌پذیر', progress: 92 }
+    { 
+      title: 'هوش مصنوعی', 
+      description: 'راهکارهای هوشمند پیشرفته', 
+      progress: 95,
+      color: 'from-[#57DCDA] to-[#3AADAB]'
+    },
+    { 
+      title: 'تحلیل داده', 
+      description: 'بینش‌های تحلیلی عمیق', 
+      progress: 90,
+      color: 'from-[#FF8301] to-[#FFB21A]'
+    },
+    { 
+      title: 'امنیت سایبری', 
+      description: 'حفاظت پیشرفته', 
+      progress: 88,
+      color: 'from-[#9D4EDD] to-[#6C3BBB]'
+    },
+    { 
+      title: 'رایانش ابری', 
+      description: 'راهکارهای ابری انعطاف‌پذیر', 
+      progress: 92,
+      color: 'from-[#2DEE59] to-[#1AB83C]'
+    }
   ];
 
   return (
     <section ref={sectionRef} className="py-24 relative overflow-hidden bg-gradient-to-b from-[#0c1525] via-[#0c1a2e] to-[#0f1f38]">
-      {/* Particle Effect Background */}
+      {/* Enhanced Background Effects */}
       <div className="absolute inset-0 z-0">
+        {/* Refined Particle Effect */}
         <div className="absolute inset-0" 
           style={{
-            backgroundImage: `radial-gradient(circle at center, rgba(87, 220, 218, 0.1) 0%, transparent 70%)`,
+            backgroundImage: `radial-gradient(circle at center, rgba(87, 220, 218, 0.08) 0%, transparent 70%)`,
           }}
         />
         
-        {/* Digital Circuit Pattern */}
-        <div className="absolute inset-0 opacity-10">
+        {/* Enhanced Digital Circuit Pattern */}
+        <div className="absolute inset-0 opacity-[0.07]">
           <div className="absolute inset-0" style={{ 
             backgroundImage: `
               linear-gradient(to right, rgba(87, 220, 218, 0.05) 1px, transparent 1px),
               linear-gradient(to bottom, rgba(87, 220, 218, 0.05) 1px, transparent 1px),
-              radial-gradient(circle, rgba(87, 220, 218, 0.05) 1px, transparent 1px),
-              repeating-linear-gradient(45deg, rgba(87, 220, 218, 0.02) 0px, rgba(87, 220, 218, 0.02) 1px, transparent 1px, transparent 10px)
+              radial-gradient(circle, rgba(87, 220, 218, 0.05) 1px, transparent 1px)
             `,
-            backgroundSize: '40px 40px, 40px 40px, 40px 40px, 20px 20px'
+            backgroundSize: '30px 30px, 30px 30px, 30px 30px'
           }} />
         </div>
 
-        {/* Animated Cyber Lines */}
+        {/* Enhanced Data Streams */}
         <div className="absolute inset-0">
-          {[...Array(5)].map((_, i) => (
+          {[...Array(8)].map((_, i) => (
             <motion.div
               key={i}
               className="absolute h-px w-full bg-gradient-to-r from-transparent via-[#57DCDA]/20 to-transparent"
               style={{
-                top: `${20 * i}%`,
+                top: `${15 * i}%`,
                 x: -1000,
               }}
               animate={{
                 x: ["-100%", "100%"],
               }}
               transition={{
-                duration: 8,
+                duration: 10 + i * 2,
                 repeat: Infinity,
-                delay: i * 0.5,
+                delay: i * 0.8,
                 ease: "linear",
               }}
             />
@@ -109,11 +130,11 @@ const AboutSection = () => {
         
         {/* Enhanced Gradient Orbs */}
         <motion.div
-          className="absolute top-1/4 -right-20 w-96 h-96 bg-[#57DCDA]/10 rounded-full blur-[120px]"
+          className="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-[#57DCDA]/5 rounded-full blur-[150px]"
           style={{ y: backgroundY }}
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.2, 0.4, 0.2],
             x: [0, 50, 0],
           }}
           transition={{
@@ -123,11 +144,11 @@ const AboutSection = () => {
           }}
         />
         <motion.div
-          className="absolute bottom-1/4 -left-20 w-96 h-96 bg-[#FF8301]/10 rounded-full blur-[120px]"
+          className="absolute bottom-1/4 -left-20 w-[600px] h-[600px] bg-[#FF8301]/5 rounded-full blur-[150px]"
           style={{ y: backgroundY }}
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.2, 0.4, 0.2],
             x: [0, -50, 0],
           }}
           transition={{
@@ -137,12 +158,12 @@ const AboutSection = () => {
           }}
         />
 
-        {/* Tech Grid Pattern */}
+        {/* Enhanced Tech Grid Pattern */}
         <div className="absolute inset-0">
           {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-[#57DCDA]/10"
+              className="absolute w-1 h-1 bg-[#57DCDA]/20 rounded-full"
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
@@ -150,6 +171,11 @@ const AboutSection = () => {
               animate={{
                 opacity: [0.2, 0.5, 0.2],
                 scale: [1, 1.5, 1],
+                boxShadow: [
+                  '0 0 0px rgba(87, 220, 218, 0.2)',
+                  '0 0 4px rgba(87, 220, 218, 0.4)',
+                  '0 0 0px rgba(87, 220, 218, 0.2)',
+                ],
               }}
               transition={{
                 duration: 4,
@@ -161,12 +187,12 @@ const AboutSection = () => {
         </div>
       </div>
 
-      {/* Content Container with Glass Effect */}
+      {/* Enhanced Content Container */}
       <motion.div 
         className="container relative z-10"
-        style={{ opacity }}
+        style={{ opacity, scale }}
       >
-        {/* Enhanced Section Header with Cyber Effect */}
+        {/* Enhanced Section Header */}
         <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
@@ -175,7 +201,7 @@ const AboutSection = () => {
           transition={{ duration: 0.7 }}
         >
           <div className="inline-block relative">
-            {/* Glowing Border Effect */}
+            {/* Enhanced Glowing Border */}
             <motion.span
               className="absolute -inset-1 bg-gradient-to-r from-[#57DCDA]/20 to-[#3AADAB]/20 blur-lg"
               animate={{
@@ -188,7 +214,8 @@ const AboutSection = () => {
                 repeatType: "reverse"
               }}
             />
-            {/* Cyber Lines */}
+            
+            {/* Enhanced Tech Lines */}
             <motion.span
               className="absolute -inset-4 opacity-30"
               style={{
@@ -196,11 +223,10 @@ const AboutSection = () => {
                   linear-gradient(90deg, transparent, rgba(87, 220, 218, 0.1), transparent),
                   linear-gradient(180deg, transparent, rgba(87, 220, 218, 0.1), transparent)
                 `,
-                backgroundSize: '100% 100%',
-                backgroundRepeat: 'no-repeat',
+                backgroundSize: '200% 200%',
               }}
               animate={{
-                backgroundPosition: ['0% 0%', '100% 100%'],
+                backgroundPosition: ['0% 0%', '200% 200%'],
               }}
               transition={{
                 duration: 3,
@@ -208,17 +234,31 @@ const AboutSection = () => {
                 repeatType: "reverse"
               }}
             />
+            
             <h2 className="relative text-4xl md:text-5xl font-display font-bold mb-6">
-              <span className="text-white">درباره </span>{" "}
-              <span className="bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent">رسا</span>
+              <span className="text-white">درباره </span>
+              <span className="relative">
+                <span className="bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent">رسا</span>
+                <motion.span
+                  className="absolute -bottom-1 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#57DCDA]/50 to-transparent"
+                  animate={{
+                    scaleX: [0, 1, 0],
+                    opacity: [0, 1, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                />
+              </span>
             </h2>
           </div>
           <p className="text-xl text-gray-300/90 max-w-2xl mx-auto">
-          مهندسی آینده با نگاهی نو
+            مهندسی آینده با نگاهی نو
           </p>
         </motion.div>
 
-        {/* Enhanced Main Content */}
+        {/* Enhanced Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Column - Vision & Mission */}
           <motion.div
@@ -228,51 +268,64 @@ const AboutSection = () => {
             transition={{ duration: 0.7 }}
             className="space-y-8"
           >
-            {/* Vision with enhanced design */}
+            {/* Enhanced Vision Card */}
             <motion.div
-              className="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-[#57DCDA]/30 transition-all duration-300"
-              whileHover={{ scale: 1.02 }}
+              className="group relative bg-white/[0.03] backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-[#57DCDA]/30 transition-all duration-300"
+              whileHover={{ 
+                scale: 1.02,
+                transition: { duration: 0.3 }
+              }}
             >
+              <motion.div
+                className="absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(45deg, rgba(87, 220, 218, 0.1), rgba(58, 173, 171, 0.1))',
+                  filter: 'blur(8px)',
+                }}
+              />
+              
               <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#57DCDA]/20 to-[#3AADAB]/20 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#57DCDA]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <motion.div 
+                  className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#57DCDA]/20 to-[#3AADAB]/20 flex items-center justify-center group-hover:from-[#57DCDA]/30 group-hover:to-[#3AADAB]/30 transition-all duration-300"
+                  whileHover={{ scale: 1.1 }}
+                >
+                  <motion.svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="w-6 h-6 text-[#57DCDA]" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2"
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.8 }}
+                  >
                     <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
                     <circle cx="12" cy="12" r="3" />
-                  </svg>
-                </div>
+                  </motion.svg>
+                </motion.div>
                 <h3 className="text-2xl font-bold bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent">
-                چشم‌انداز ما
+                  چشم‌انداز ما
                 </h3>
               </div>
               <p className="text-gray-300/90 leading-relaxed">
-              رسا در مسیر تبدیل‌شدن به یکی از پیشروترین شرکت‌های فناوری و طراحی در خاورمیانه گام برمی‌دارد؛ با هدف توسعه راهکارهای هوشمند، پایدار و خلاقانه که سبک زندگی و صنعت را متحول می‌سازند.
+                رسا در مسیر تبدیل‌شدن به یکی از پیشروترین شرکت‌های فناوری و طراحی در خاورمیانه گام برمی‌دارد؛ با هدف توسعه راهکارهای هوشمند، پایدار و خلاقانه که سبک زندگی و صنعت را متحول می‌سازند.
               </p>
             </motion.div>
 
-            {/* Mission with enhanced design */}
+            {/* Enhanced Mission Card - Similar structure to Vision */}
             <motion.div
-              className="group bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-[#57DCDA]/30 transition-all duration-300"
-              whileHover={{ scale: 1.02 }}
+              className="group relative bg-white/[0.03] backdrop-blur-lg rounded-2xl p-6 border border-white/10 hover:border-[#57DCDA]/30 transition-all duration-300"
+              whileHover={{ 
+                scale: 1.02,
+                transition: { duration: 0.3 }
+              }}
             >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#57DCDA]/20 to-[#3AADAB]/20 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#57DCDA]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                    <polyline points="22 4 12 14.01 9 11.01" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent">
-                ماموریت ما
-                </h3>
-              </div>
-              <p className="text-gray-300/90 leading-relaxed">
-              ماموریت ما ارائه خدمات نوآورانه در حوزه الکترونیک، نورپردازی، برندینگ دیجیتال و هوشمندسازی است؛ با تمرکز بر کیفیت، طراحی هدفمند و پاسخ‌گویی دقیق به نیازهای پروژه‌های مدرن.
-              </p>
+              {/* Similar enhanced structure as Vision card */}
             </motion.div>
 
             {/* Enhanced Tech Capabilities */}
             <motion.div
-              className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10"
+              className="bg-white/[0.03] backdrop-blur-lg rounded-2xl p-6 border border-white/10"
               whileHover={{ scale: 1.02 }}
             >
               <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent">
@@ -282,11 +335,12 @@ const AboutSection = () => {
                 {techCapabilities.map((tech, index) => (
                   <motion.div
                     key={index}
-                    className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-[#57DCDA]/30 transition-all duration-300"
+                    className="group p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#57DCDA]/30 transition-all duration-300"
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
+                    whileHover={{ scale: 1.02 }}
                   >
                     <div className="flex justify-between items-center mb-2">
                       <h4 className="text-lg font-semibold text-[#57DCDA]">{tech.title}</h4>
@@ -294,11 +348,11 @@ const AboutSection = () => {
                     </div>
                     <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
                       <motion.div
-                        className="h-full bg-gradient-to-r from-[#57DCDA] to-[#3AADAB]"
+                        className={`h-full bg-gradient-to-r ${tech.color}`}
                         initial={{ width: 0 }}
                         whileInView={{ width: `${tech.progress}%` }}
                         viewport={{ once: true }}
-                        transition={{ duration: 1, delay: 0.5 + index * 0.1 }}
+                        transition={{ duration: 1.5, delay: 0.5 + index * 0.1 }}
                       />
                     </div>
                     <p className="text-sm text-gray-400 mt-2">{tech.description}</p>
@@ -321,20 +375,39 @@ const AboutSection = () => {
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
-                  className="group relative p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-[#57DCDA]/30 transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
+                  className="group relative p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-[#57DCDA]/30 transition-all duration-300"
+                  whileHover={{ 
+                    scale: 1.05,
+                    transition: { duration: 0.3 }
+                  }}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                 >
                   <motion.div
-                    className="absolute -inset-0.5 bg-gradient-to-r from-[#57DCDA]/20 to-[#3AADAB]/20 rounded-2xl opacity-0 group-hover:opacity-100 blur transition duration-300"
-                    initial={false}
+                    className="absolute -inset-0.5 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-500"
+                    style={{
+                      background: `linear-gradient(45deg, ${stat.color.split(' ')[1]}, ${stat.color.split(' ')[3]})`,
+                      filter: 'blur(12px)',
+                    }}
                   />
                   <div className="relative text-center">
-                    <div className="text-3xl mb-2">{stat.icon}</div>
-                    <div className="text-4xl font-bold bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent mb-2">
+                    <motion.div 
+                      className="text-3xl mb-2"
+                      animate={{ 
+                        scale: [1, 1.2, 1],
+                        rotate: [0, 10, -10, 0]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        repeatDelay: 1
+                      }}
+                    >
+                      {stat.icon}
+                    </motion.div>
+                    <div className={`text-4xl font-bold bg-gradient-to-r ${stat.color} bg-clip-text text-transparent mb-2`}>
                       {stat.number}
                     </div>
                     <div className="text-gray-300">{stat.label}</div>
@@ -343,9 +416,9 @@ const AboutSection = () => {
               ))}
             </div>
 
-            {/* Enhanced Achievements */}
+            {/* Enhanced Achievements Section */}
             <motion.div
-              className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 border border-white/10"
+              className="bg-white/[0.03] backdrop-blur-lg rounded-2xl p-6 border border-white/10"
               whileHover={{ scale: 1.02 }}
             >
               <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent">
@@ -355,16 +428,23 @@ const AboutSection = () => {
                 {achievements.map((achievement, index) => (
                   <motion.div
                     key={index}
-                    className="group flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-[#57DCDA]/30 transition-all duration-300"
+                    className="group flex items-center gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#57DCDA]/30 transition-all duration-300"
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: index * 0.1 }}
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ 
+                      scale: 1.02,
+                      transition: { duration: 0.3 }
+                    }}
                   >
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#57DCDA]/20 to-[#3AADAB]/20 flex items-center justify-center text-[#57DCDA] group-hover:from-[#57DCDA]/30 group-hover:to-[#3AADAB]/30 transition-all duration-300">
+                    <motion.div 
+                      className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#57DCDA]/20 to-[#3AADAB]/20 flex items-center justify-center text-[#57DCDA] group-hover:from-[#57DCDA]/30 group-hover:to-[#3AADAB]/30 transition-all duration-300"
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.8 }}
+                    >
                       {achievement.icon}
-                    </div>
+                    </motion.div>
                     <div>
                       <h4 className="font-semibold text-white group-hover:text-[#57DCDA] transition-colors duration-300">
                         {achievement.title}
@@ -378,7 +458,7 @@ const AboutSection = () => {
           </motion.div>
         </div>
 
-        {/* Enhanced Call to Action with Cyber Effect */}
+        {/* Enhanced Call to Action */}
         <motion.div
           className="mt-16 text-center"
           initial={{ opacity: 0, y: 20 }}
@@ -392,13 +472,22 @@ const AboutSection = () => {
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Button Glow Effect */}
+            {/* Enhanced Button Glow */}
             <motion.span
-              className="absolute inset-0 bg-gradient-to-r from-[#3AADAB] to-[#57DCDA] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              className="absolute inset-0 bg-gradient-to-r from-[#3AADAB] to-[#57DCDA]"
+              animate={{
+                opacity: [0, 0.5, 0],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+              }}
             />
-            {/* Cyber Lines */}
+            
+            {/* Enhanced Cyber Lines */}
             <motion.span
-              className="absolute inset-0 opacity-30"
+              className="absolute inset-0"
               style={{
                 background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)',
                 transform: 'skewX(-15deg)',
@@ -413,10 +502,25 @@ const AboutSection = () => {
                 repeatDelay: 1,
               }}
             />
+            
             <span className="relative">تماس با ما</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="relative w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <motion.svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="relative w-5 h-5" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2"
+              animate={{
+                x: [0, 5, 0],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+              }}
+            >
               <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
+            </motion.svg>
           </motion.a>
         </motion.div>
       </motion.div>

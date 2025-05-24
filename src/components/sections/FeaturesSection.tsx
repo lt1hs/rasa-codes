@@ -1,131 +1,243 @@
-import { motion } from 'framer-motion';
-import React from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useInView } from '../../hooks/useInView';
+import SectionWrapper from '../ui/SectionWrapper';
 
 const FeaturesSection = () => {
+  const { scrollYProgress } = useScroll();
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.2, 0.4], [0, 1, 1]);
+  
   const features = [
     {
       icon: 'sparkles',
       title: 'طراحی و نورپردازی حرفه‌ای',
       description: 'خلق فضاهایی الهام‌بخش با مهندسی نور',
-      color: 'from-blue-500 to-cyan-400',
+      color: 'from-[#57DCDA] to-[#2B95D3]',
+      glowColor: 'rgba(87, 220, 218, 0.3)',
       techPattern: 'circuit-1',
     },
     {
       icon: 'chart',
       title: 'هوشمندسازی ساختمان و خانه‌های مدرن',
       description: 'زندگی هوشمند، راحتی بی‌نهایت.',
-      color: 'from-purple-500 to-indigo-500',
+      color: 'from-[#9D4EDD] to-[#6C3BBB]',
+      glowColor: 'rgba(157, 78, 221, 0.3)',
       techPattern: 'circuit-2',
     },
     {
       icon: 'shield',
       title: 'طراحی و ساخت تابلوهای تبلیغات',
       description: 'برند شما، درخشان‌تر از همیشه.',
-      color: 'from-green-500 to-emerald-400',
+      color: 'from-[#2DEE59] to-[#1AB83C]',
+      glowColor: 'rgba(45, 238, 89, 0.3)',
       techPattern: 'circuit-3',
     },
     {
       icon: 'chat',
       title: 'مهندسی محصولات الکترونیکی خاص',
       description: 'از ایده تا محصول نهایی، سفارشی‌سازی کامل.',
-      color: 'from-amber-500 to-orange-400',
+      color: 'from-[#FF8301] to-[#D95D04]',
+      glowColor: 'rgba(255, 131, 1, 0.3)',
       techPattern: 'circuit-4',
     },
     {
       icon: 'bolt',
       title: 'فناوری انرژی خورشیدی و سیستم‌های پایدار',
       description: 'قدرت خورشید در خدمت آینده پاک‌تر.',
-      color: 'from-red-500 to-pink-500',
+      color: 'from-[#FF4D4D] to-[#D93030]',
+      glowColor: 'rgba(255, 77, 77, 0.3)',
       techPattern: 'circuit-5',
     },
     {
       icon: 'user',
       title: 'طراحی سه‌بعدی و واقعیت افزوده',
       description: 'ایده‌ها را قبل از اجرا لمس کنی.',
-      color: 'from-teal-500 to-cyan-400',
+      color: 'from-[#00D4FF] to-[#0095B3]',
+      glowColor: 'rgba(0, 212, 255, 0.3)',
       techPattern: 'circuit-6',
     },
   ];
 
-  // Animation variants
+  // Enhanced animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.3
+        staggerChildren: 0.12,
+        delayChildren: 0.3,
+        ease: [0.25, 0.1, 0.25, 1],
       }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: { y: 40, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.6, type: "spring", stiffness: 100 }
+      transition: {
+        duration: 0.7,
+        ease: [0.25, 0.1, 0.25, 1],
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      }
     }
   };
 
-  // Digital circuit patterns
+  // Enhanced circuit patterns with smoother animations
   const renderCircuitPattern = (type: string) => {
+    const baseProps = {
+      className: "absolute bottom-0 right-0 w-24 h-24",
+      style: { opacity: 0.12 },
+      initial: { pathLength: 0, opacity: 0 },
+      animate: { pathLength: 1, opacity: 0.12 },
+      transition: {
+        duration: 2.5,
+        ease: "easeInOut",
+        delay: Math.random() * 0.5,
+      }
+    };
+
     switch (type) {
       case 'circuit-1':
         return (
-          <svg className="absolute bottom-0 right-0 w-24 h-24 opacity-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,30 L40,30 L40,10" stroke="currentColor" strokeWidth="1" />
-            <path d="M50,10 L50,40 L90,40" stroke="currentColor" strokeWidth="1" />
-            <path d="M90,50 L60,50 L60,90" stroke="currentColor" strokeWidth="1" />
-            <circle cx="40" cy="30" r="3" fill="currentColor" />
-            <circle cx="50" cy="40" r="3" fill="currentColor" />
-            <circle cx="60" cy="50" r="3" fill="currentColor" />
+          <svg {...baseProps} viewBox="0 0 100 100" fill="none">
+            <motion.path
+              d="M10,30 Q25,30 40,30 T70,30 L70,10"
+              stroke="currentColor"
+              strokeWidth="1"
+              {...baseProps}
+            />
+            <motion.path
+              d="M50,10 L50,40 Q50,55 65,55 L90,55"
+              stroke="currentColor"
+              strokeWidth="1"
+              {...baseProps}
+            />
+            <motion.circle cx="70" cy="30" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
+            <motion.circle cx="50" cy="55" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" begin="0.5s" repeatCount="indefinite" />
+            </motion.circle>
           </svg>
         );
       case 'circuit-2':
         return (
-          <svg className="absolute bottom-0 right-0 w-24 h-24 opacity-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,20 L30,20 L30,50 L60,50 L60,80 L90,80" stroke="currentColor" strokeWidth="1" />
-            <path d="M10,80 L30,80 L30,50" stroke="currentColor" strokeWidth="1" />
-            <circle cx="30" cy="50" r="3" fill="currentColor" />
-            <circle cx="60" cy="50" r="3" fill="currentColor" />
+          <svg {...baseProps} viewBox="0 0 100 100" fill="none">
+            <motion.path
+              d="M10,20 L30,20 L30,50 L60,50 L60,80 L90,80"
+              stroke="currentColor"
+              strokeWidth="1"
+              {...baseProps}
+            />
+            <motion.path
+              d="M10,80 L30,80 L30,50"
+              stroke="currentColor"
+              strokeWidth="1"
+              {...baseProps}
+            />
+            <motion.circle cx="30" cy="50" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
+            <motion.circle cx="60" cy="50" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
           </svg>
         );
       case 'circuit-3':
         return (
-          <svg className="absolute bottom-0 right-0 w-24 h-24 opacity-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20,10 L20,40 L50,40 L50,70 L80,70" stroke="currentColor" strokeWidth="1" />
-            <path d="M80,10 L80,40 L50,40" stroke="currentColor" strokeWidth="1" />
-            <circle cx="50" cy="40" r="3" fill="currentColor" />
-            <circle cx="20" cy="40" r="3" fill="currentColor" />
-            <circle cx="80" cy="40" r="3" fill="currentColor" />
+          <svg {...baseProps} viewBox="0 0 100 100" fill="none">
+            <motion.path
+              d="M20,10 L20,40 L50,40 L50,70 L80,70"
+              stroke="currentColor"
+              strokeWidth="1"
+              {...baseProps}
+            />
+            <motion.path
+              d="M80,10 L80,40 L50,40"
+              stroke="currentColor"
+              strokeWidth="1"
+              {...baseProps}
+            />
+            <motion.circle cx="50" cy="40" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
+            <motion.circle cx="20" cy="40" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
+            <motion.circle cx="80" cy="40" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
           </svg>
         );
       case 'circuit-4':
         return (
-          <svg className="absolute bottom-0 right-0 w-24 h-24 opacity-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,10 L90,10 L90,90" stroke="currentColor" strokeWidth="1" />
-            <path d="M10,90 L90,90" stroke="currentColor" strokeWidth="1" />
-            <circle cx="50" cy="10" r="3" fill="currentColor" />
-            <circle cx="90" cy="50" r="3" fill="currentColor" />
-            <circle cx="50" cy="90" r="3" fill="currentColor" />
+          <svg {...baseProps} viewBox="0 0 100 100" fill="none">
+            <motion.path
+              d="M10,10 L90,10 L90,90"
+              stroke="currentColor"
+              strokeWidth="1"
+              {...baseProps}
+            />
+            <motion.path
+              d="M10,90 L90,90"
+              stroke="currentColor"
+              strokeWidth="1"
+              {...baseProps}
+            />
+            <motion.circle cx="50" cy="10" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
+            <motion.circle cx="90" cy="50" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
+            <motion.circle cx="50" cy="90" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
           </svg>
         );
       case 'circuit-5':
         return (
-          <svg className="absolute bottom-0 right-0 w-24 h-24 opacity-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M50,10 L50,90" stroke="currentColor" strokeWidth="1" />
-            <path d="M10,50 L90,50" stroke="currentColor" strokeWidth="1" />
-            <circle cx="50" cy="50" r="5" fill="currentColor" />
-            <circle cx="30" cy="30" r="3" fill="currentColor" />
-            <circle cx="70" cy="70" r="3" fill="currentColor" />
+          <svg {...baseProps} viewBox="0 0 100 100" fill="none">
+            <motion.path
+              d="M50,10 L50,90"
+              stroke="currentColor"
+              strokeWidth="1"
+              {...baseProps}
+            />
+            <motion.path
+              d="M10,50 L90,50"
+              stroke="currentColor"
+              strokeWidth="1"
+              {...baseProps}
+            />
+            <motion.circle cx="50" cy="50" r="5" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
+            <motion.circle cx="30" cy="30" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
+            <motion.circle cx="70" cy="70" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
           </svg>
         );
       default:
         return (
-          <svg className="absolute bottom-0 right-0 w-24 h-24 opacity-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,50 C30,30 70,30 90,50 C70,70 30,70 10,50 Z" stroke="currentColor" strokeWidth="1" fill="none" />
-            <circle cx="50" cy="50" r="3" fill="currentColor" />
+          <svg {...baseProps} viewBox="0 0 100 100" fill="none">
+            <motion.path
+              d="M10,50 C30,30 70,30 90,50 C70,70 30,70 10,50 Z"
+              stroke="currentColor"
+              strokeWidth="1"
+              fill="none"
+              {...baseProps}
+            />
+            <motion.circle cx="50" cy="50" r="2" fill="currentColor">
+              <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite" />
+            </motion.circle>
           </svg>
         );
     }
@@ -181,129 +293,102 @@ const FeaturesSection = () => {
 
   return (
     <section className="py-24 bg-secondary relative overflow-hidden mt-[-300px]">
-      {/* Enhanced background elements */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-secondary-dark to-transparent opacity-60" />
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-[120px]" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-accent/10 rounded-full blur-[120px]" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-primary/5 to-accent/5 rounded-full blur-[100px]" />
+      {/* Enhanced background with dynamic elements */}
+      <motion.div 
+        className="absolute inset-0 z-0"
+        style={{ y: backgroundY }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-secondary-dark via-secondary to-secondary-dark" />
         
-        {/* Digital grid background */}
-        <div className="absolute inset-0 opacity-10">
+        {/* Enhanced glow effects */}
+        <div className="absolute -top-24 -right-24 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px] animate-pulse" />
+        <div className="absolute -bottom-24 -left-24 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[150px] animate-pulse" />
+        
+        {/* Refined digital grid */}
+        <div className="absolute inset-0 opacity-[0.15]">
           <div className="absolute inset-0" style={{ 
-            backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)',
-            backgroundSize: '40px 40px'
+            backgroundImage: 'linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)',
+            backgroundSize: '30px 30px'
           }} />
         </div>
-        
-        {/* Tech circuit lines */}
-        <div className="absolute inset-0 overflow-hidden">
-          <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path 
-              d="M0,30 Q25,20 50,30 T100,30 V100 H0 Z" 
-              fill="none" 
-              stroke="rgba(255,255,255,0.03)" 
-              strokeWidth="0.5"
-            />
-            <path 
-              d="M0,60 Q25,50 50,60 T100,60 V100 H0 Z" 
-              fill="none" 
-              stroke="rgba(255,255,255,0.03)" 
-              strokeWidth="0.5"
-            />
-          </svg>
-        </div>
-        
-        {/* Animated particles */}
-        <div className="hidden lg:block">
-          {[...Array(12)].map((_, index) => (
-            <motion.div
-              key={index}
-              className="absolute w-1 h-1 bg-white rounded-full"
-              style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                opacity: 0.3 + Math.random() * 0.5,
-              }}
-              animate={{
-                y: [0, -20, 0],
-                opacity: [0.2, 0.5, 0.2],
-              }}
-              transition={{
-                duration: 3 + Math.random() * 5,
-                repeat: Infinity,
-                repeatType: "reverse",
-                ease: "easeInOut",
-                delay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-        
-        {/* Digital data streams */}
-        <div className="absolute inset-0 overflow-hidden opacity-20">
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={`stream-${i}`}
-              className="absolute h-px bg-gradient-to-r from-transparent via-primary to-transparent"
-              style={{
-                top: `${15 + i * 20}%`,
-                left: 0,
-                right: 0,
-              }}
-              animate={{
-                x: ['-100%', '100%'],
-              }}
-              transition={{
-                duration: 8 + i * 2,
-                repeat: Infinity,
-                ease: "linear",
-                delay: i * 0.5,
-              }}
-            />
-          ))}
-        </div>
-      </div>
 
-      <div className="container relative z-10">
-        {/* Enhanced section header with tech elements */}
+        {/* Enhanced data streams */}
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={`stream-${i}`}
+            className="absolute h-px"
+            style={{
+              top: `${10 + i * 12}%`,
+              left: 0,
+              right: 0,
+              background: 'linear-gradient(90deg, transparent, rgba(87, 220, 218, 0.3), transparent)',
+              width: '100%',
+            }}
+            animate={{
+              x: ['-100%', '100%'],
+              opacity: [0, 0.3, 0],
+            }}
+            transition={{
+              duration: 10 + i * 2,
+              repeat: Infinity,
+              ease: "linear",
+              delay: i * 0.8,
+            }}
+          />
+        ))}
+      </motion.div>
+
+      <motion.div 
+        className="container relative z-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        {/* Enhanced section header */}
         <div className="text-center mb-20 mt-[140px] relative">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-16 bg-gradient-to-b from-transparent to-primary/30" />
-          
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, type: "spring" }}
+            transition={{ duration: 0.8, type: "spring", stiffness: 100 }}
             viewport={{ once: true, margin: "-100px" }}
+            className="relative"
           >
+            {/* Tech indicator lights */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 flex gap-2">
+              {[...Array(3)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="w-1 h-1 rounded-full bg-primary"
+                  animate={{
+                    opacity: [0.3, 1, 0.3],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    delay: i * 0.3,
+                  }}
+                />
+              ))}
+            </div>
+
             <motion.div
-              className="inline-block mb-3 px-4 py-1.5 bg-primary/10 rounded-full backdrop-blur-sm border border-primary/20 relative"
-              initial={{ scale: 0.9 }}
-              whileInView={{ scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
-              viewport={{ once: true }}
+              className="inline-block mb-4 px-6 py-2 bg-primary/10 rounded-full backdrop-blur-sm border border-primary/20"
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
             >
-              {/* Tech decoration */}
-              <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-primary rounded-full" />
-              <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-2 h-2 bg-primary rounded-full" />
-              
               <h2 className="text-sm font-medium tracking-wider text-primary uppercase">خدمات ما</h2>
             </motion.div>
             
-            <h3 className="text-4xl md:text-5xl font-display font-bold mb-6 relative inline-block rtl">
+            <h3 className="text-4xl md:text-5xl font-display font-bold mb-6">
               <span className="text-white">پیوند فناوری</span>{" "}
-              <span className="bg-gradient-to-r from-orange-500 to-amber-400 bg-clip-text text-transparent">با خلاقیت</span>
-              
-              {/* Futuristic underline */}
-              <motion.div 
-                className="absolute -bottom-2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"
-                animate={{ scaleX: [0.5, 1, 0.5], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 4, repeat: Infinity }}
-              />
+              <span className="bg-gradient-to-r from-[#FF8301] to-[#FFB21A] bg-clip-text text-transparent">
+                با خلاقیت
+              </span>
             </h3>
             
             <motion.p 
-              className="mt-4 text-lg text-gray-300/90 max-w-2xl mx-auto"
+              className="mt-6 text-lg text-gray-300/90 max-w-2xl mx-auto leading-relaxed"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
@@ -311,143 +396,167 @@ const FeaturesSection = () => {
             >
               با استفاده از جدیدترین فناوری‌ها، راهکارهای هوشمند و خلاقانه برای کسب و کار شما ارائه می‌دهیم
             </motion.p>
-            
-            {/* Tech radar animation */}
-            <div className="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-1/2 w-40 h-40 opacity-10 pointer-events-none">
-              <motion.div 
-                className="absolute inset-0 border-2 border-primary rounded-full"
-                animate={{ scale: [0, 1], opacity: [1, 0] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeOut" }}
-              />
-            </div>
           </motion.div>
         </div>
 
-        {/* Enhanced features grid with tech elements */}
+        {/* Enhanced features grid */}
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: "-50px" }}
         >
-          {features.map((feature) => (
+          {features.map((feature, index) => (
             <motion.div
               key={feature.title}
               variants={itemVariants}
-              whileHover={{ 
-                y: -10,
-                scale: 1.02,
-                transition: { duration: 0.3 }
-              }}
               className="relative group"
             >
-              <div className="absolute inset-0 bg-gradient-to-r rounded-2xl blur-lg opacity-30 group-hover:opacity-100 transition-opacity duration-300 -z-10"
-                style={{ backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))` }}
+              <motion.div
+                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                  background: `radial-gradient(circle at 50% 50%, ${feature.glowColor}, transparent 70%)`,
+                  filter: 'blur(20px)',
+                }}
               />
-              
-              <div className="glass-card p-8 rounded-2xl h-full border border-white/10 backdrop-blur-md bg-white/5 relative z-10 overflow-hidden shadow-lg">
-                {/* Tech border effect */}
-                <motion.div 
-                  className="absolute inset-0 border border-white/5 rounded-2xl pointer-events-none"
-                  animate={{ 
-                    boxShadow: ['0 0 0px rgba(255,255,255,0)', '0 0 10px rgba(255,255,255,0.2)', '0 0 0px rgba(255,255,255,0)']
+
+              <motion.div
+                className="glass-card p-8 rounded-2xl h-full border border-white/20 bg-white/[0.05] backdrop-blur-lg relative overflow-hidden"
+                whileHover={{ 
+                  y: -8,
+                  transition: { duration: 0.4, ease: [0.23, 1, 0.32, 1] }
+                }}
+              >
+                {/* Animated border effect */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl"
+                  initial={{ background: 'radial-gradient(circle at 0% 0%, rgba(255,255,255,0.1), transparent 50%)' }}
+                  whileHover={{
+                    background: [
+                      'radial-gradient(circle at 0% 0%, rgba(255,255,255,0.1), transparent 50%)',
+                      'radial-gradient(circle at 100% 100%, rgba(255,255,255,0.1), transparent 50%)',
+                    ],
                   }}
-                  transition={{ duration: 3, repeat: Infinity, delay: Math.random() * 2 }}
+                  transition={{ duration: 1.5, ease: "linear" }}
                 />
-                
-                {/* Subtle gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-br opacity-10 -z-10" />
-                
-                {/* Digital circuit pattern */}
-                {renderCircuitPattern(feature.techPattern)}
-                
-                {/* Icon with gradient background and tech effect */}
-                <div className="relative">
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white mb-6 shadow-lg relative`}>
-                    {/* Pulsing effect */}
-                    <motion.div 
-                      className="absolute inset-0 rounded-xl"
-                      animate={{ 
-                        boxShadow: ['0 0 0px rgba(255,255,255,0)', '0 0 15px rgba(255,255,255,0.4)', '0 0 0px rgba(255,255,255,0)']
+
+                {/* Icon container with enhanced effects */}
+                <div className="relative mb-6">
+                  <motion.div
+                    className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-white relative`}
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <motion.div
+                      className="absolute inset-0 rounded-xl opacity-0"
+                      whileHover={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                      style={{
+                        background: `radial-gradient(circle at 50% 50%, ${feature.glowColor}, transparent 70%)`,
+                        filter: 'blur(8px)',
                       }}
-                      transition={{ duration: 2, repeat: Infinity, delay: Math.random() }}
                     />
-                {renderIcon(feature.icon)}
-                  </div>
-                  
-                  {/* Tech connector line */}
-                  <div className="absolute top-7 -right-4 w-4 h-px bg-gradient-to-r from-white/30 to-transparent" />
-                </div>
-                
-                <h4 className="text-2xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300">{feature.title}</h4>
-                <p className="text-gray-300/80 leading-relaxed">{feature.description}</p>
-                
-                {/* Tech data indicator */}
-                <div className="absolute top-4 right-4 flex items-center gap-1 opacity-30">
-                  <div className="w-1 h-1 bg-primary rounded-full"></div>
-                  <motion.div 
-                    className="w-1 h-1 bg-primary rounded-full"
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+                    
+                    <div className="relative z-10">
+                      {renderIcon(feature.icon)}
+                    </div>
+                  </motion.div>
+
+                  {/* Tech connector lines */}
+                  <motion.div
+                    className="absolute top-8 -right-4 w-4 h-px"
+                    style={{ background: `linear-gradient(to right, ${feature.glowColor}, transparent)` }}
+                    animate={{
+                      opacity: [0.3, 1, 0.3],
+                      width: ['16px', '24px', '16px'],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: index * 0.2,
+                    }}
                   />
                 </div>
+
+                <h4 className="text-2xl font-bold mb-3 text-white">
+                  {feature.title}
+                </h4>
                 
-                {/* Decorative element */}
-                <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-gradient-to-br opacity-10 rounded-full" />
-              </div>
+                <p className="text-gray-300 leading-relaxed">
+                  {feature.description}
+                </p>
+
+                {/* Enhanced circuit pattern */}
+                <div className="absolute bottom-0 right-0 opacity-30">
+                  {renderCircuitPattern(feature.techPattern)}
+                </div>
+
+                {/* Tech data indicators */}
+                <div className="absolute top-4 right-4 flex items-center gap-1.5">
+                  {[...Array(2)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="w-1 h-1 rounded-full"
+                      style={{ background: feature.glowColor }}
+                      animate={{
+                        opacity: [0.4, 1, 0.4],
+                        scale: [1, 1.2, 1],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: i * 0.3,
+                      }}
+                    />
+                  ))}
+                </div>
+              </motion.div>
             </motion.div>
           ))}
         </motion.div>
 
-        {/* Enhanced action button with tech elements */}
+        {/* Enhanced CTA section */}
         <motion.div 
-          className="mt-16 text-center"
+          className="mt-20 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          viewport={{ once: true }}
         >
-          <div className="relative inline-block">
-            {/* Tech connector lines */}
-            <div className="absolute top-1/2 -left-10 w-10 h-px bg-gradient-to-r from-transparent to-primary/30" />
-            <div className="absolute top-1/2 -right-10 w-10 h-px bg-gradient-to-l from-transparent to-primary/30" />
+          <motion.a
+            href="/features"
+            className="inline-flex items-center gap-3 px-8 py-3 text-base font-medium rounded-full relative overflow-hidden group"
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary opacity-80"
+              animate={{
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+              }}
+              transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+              style={{ backgroundSize: '200% 100%' }}
+            />
             
-            <a href="/features" className="btn btn-primary inline-flex items-center gap-2 px-8 py-3 text-base font-medium rounded-full shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
-              {/* Tech scanner effect */}
-              <motion.div 
-                className="absolute inset-0 w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                animate={{ x: ['-200%', '200%'] }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-              />
-              
-              <span className="relative z-10">استكشف جميع الميزات</span>
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <span className="relative z-10">استكشف جميع الميزات</span>
+            
+            <motion.svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 relative z-10"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              animate={{ x: [0, 5, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary bg-size-200 bg-pos-0 group-hover:bg-pos-100 transition-all duration-500"></div>
-            </a>
-          </div>
-          
-          {/* Tech data points */}
-          <div className="mt-6 flex justify-center gap-8 opacity-30">
-            {[...Array(3)].map((_, i) => (
-              <motion.div 
-                key={i}
-                className="flex items-center gap-1"
-                animate={{ opacity: [0.3, 1, 0.3] }}
-                transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-              >
-                <div className="w-1 h-1 bg-primary rounded-full"></div>
-                <div className="w-6 h-px bg-primary"></div>
-                <div className="w-1 h-1 bg-primary rounded-full"></div>
-              </motion.div>
-            ))}
-          </div>
+            </motion.svg>
+          </motion.a>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };
 
-export default FeaturesSection; 
+export default FeaturesSection;

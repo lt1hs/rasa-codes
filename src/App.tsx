@@ -11,6 +11,8 @@ import ProjectsSection from './components/sections/ProjectsSection';
 import GallerySection from './components/sections/GallerySection';
 import BlogsSection from './components/sections/BlogsSection';
 import RasaAppSection from './components/sections/RasaAppSection';
+import RasaSmartCaseSection from './components/sections/RasaSmartCaseSection';
+import RasaSignsSection from './components/sections/RasaSignsSection';
 // import CTASection from './components/sections/CTASection';
 import FeaturesPage from './pages/FeaturesPage';
 import PricingPage from './pages/PricingPage';
@@ -20,6 +22,8 @@ import BlogPage from './pages/BlogPage';
 import BlogPostPage from './pages/BlogPostPage';
 import GalleryPage from './pages/GalleryPage';
 import ProjectsPage from './pages/ProjectsPage';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
 import './index.css';
 
 const App = () => {
@@ -43,16 +47,23 @@ const App = () => {
           <Header />
           <Layout>
             <Routes>
+              {/* Auth Routes */}
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
+
+              {/* Main Routes */}
               <Route path="/" element={
                 <>
                   <HeroSection />
                   <FeaturesSection />
+                  <RasaSmartCaseSection />
+                  <RasaSignsSection />
                   <TechStackSection />
                   <AboutSection />
-                  <RasaAppSection />
                   <ProjectsSection />
                   <GallerySection />
                   <BlogsSection />
+                  <RasaAppSection />
                   {/* <CTASection /> */}
                 </>
               } />

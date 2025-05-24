@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { useState, useRef } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence, useSpring, useMotionTemplate } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
 
 interface GalleryItem {
   id: number;
@@ -8,6 +8,7 @@ interface GalleryItem {
   image: string;
   description: string;
   size: 'small' | 'medium' | 'large';
+  color: string;
 }
 
 const GallerySection = () => {
@@ -15,6 +16,22 @@ const GallerySection = () => {
   const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
   const [hoveredItem, setHoveredItem] = useState<number | null>(null);
   const sectionRef = useRef(null);
+  const mouseX = useSpring(0, { stiffness: 500, damping: 50 });
+  const mouseY = useSpring(0, { stiffness: 500, damping: 50 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+      const x = (clientX / innerWidth) * 100;
+      const y = (clientY / innerHeight) * 100;
+      mouseX.set(x);
+      mouseY.set(y);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -22,6 +39,7 @@ const GallerySection = () => {
   });
 
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.3, 1, 0.3]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95]);
 
   const galleryItems: GalleryItem[] = [
     {
@@ -30,7 +48,8 @@ const GallerySection = () => {
       category: 'office',
       image: '/gallery/workspace.svg',
       description: 'فضای کار مدرن و پویا برای تیم ما',
-      size: 'large'
+      size: 'large',
+      color: '#57DCDA'
     },
     {
       id: 2,
@@ -38,7 +57,8 @@ const GallerySection = () => {
       category: 'team',
       image: '/gallery/team-meeting.svg',
       description: 'همکاری و تبادل نظر در جلسات تیمی',
-      size: 'medium'
+      size: 'medium',
+      color: '#3AADAB'
     },
     {
       id: 3,
@@ -46,7 +66,8 @@ const GallerySection = () => {
       category: 'events',
       image: '/gallery/tech-event.svg',
       description: 'حضور در رویدادهای مهم صنعت تکنولوژی',
-      size: 'large'
+      size: 'large',
+      color: '#2A8A88'
     },
     {
       id: 4,
@@ -54,46 +75,56 @@ const GallerySection = () => {
       category: 'education',
       image: '/gallery/workshop.svg',
       description: 'برگزاری کارگاه‌های تخصصی و دوره‌های آموزشی',
-      size: 'medium'
+      size: 'medium',
+      color: '#1F6F6E'
     },
     {
       id: 5,
-      title: 'ورشة عمل الذكاء الاصطناعي',
+      title: 'کارگاه هوش مصنوعی',
       category: 'events',
       image: '/gallery/event-ai.jpg',
-      description: 'ورشة عمل تدريبية حول الذكاء الاصطناعي',
-      size: 'small'
+      description: 'کارگاه آموزشی در حوزه هوش مصنوعی',
+      size: 'small',
+      color: '#57DCDA'
     },
     {
       id: 6,
-      title: 'فريق الإدارة',
+      title: 'تیم مدیریت',
       category: 'team',
       image: '/gallery/team-management.jpg',
-      description: 'فريق الإدارة التنفيذية',
-      size: 'medium'
+      description: 'تیم مدیریت اجرایی',
+      size: 'medium',
+      color: '#3AADAB'
     }
   ];
 
   const categories = [
-    { id: 'all', label: 'همه تصاویر' },
-    { id: 'office', label: 'دفتر کار' },
-    { id: 'team', label: 'تیم' },
-    { id: 'events', label: 'رویدادها' },
-    { id: 'education', label: 'آموزش' }
+    { id: 'all', label: 'همه تصاویر', icon: '🎯' },
+    { id: 'office', label: 'دفتر کار', icon: '🏢' },
+    { id: 'team', label: 'تیم', icon: '👥' },
+    { id: 'events', label: 'رویدادها', icon: '🎉' },
+    { id: 'education', label: 'آموزش', icon: '📚' }
   ];
 
   const filteredItems = galleryItems.filter(
     item => activeCategory === 'all' || item.category === activeCategory
   );
 
+  const gradientPosition = useMotionTemplate`${mouseX}% ${mouseY}%`;
+
   return (
-    <section ref={sectionRef} className="py-24 relative overflow-hidden bg-gradient-to-b from-[#0c1525] via-[#0c1a2e] to-[#0f1f38]">
+    <section ref={sectionRef} className="py-32 relative overflow-hidden bg-gradient-to-b from-[#0c1525] via-[#0c1a2e] to-[#0f1f38]">
       {/* Enhanced Background Effects */}
       <div className="absolute inset-0 z-0">
-        {/* Animated Gradient Background */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#57DCDA]/10 via-transparent to-[#3AADAB]/10" />
-        </div>
+        {/* Interactive Gradient Background */}
+        <motion.div 
+          className="absolute inset-0 opacity-30"
+          style={{
+            background: 'radial-gradient(circle at var(--x) var(--y), rgba(87,220,218,0.15), transparent 80%)',
+            '--x': gradientPosition,
+            '--y': gradientPosition
+          } as any}
+        />
 
         {/* Enhanced Grid Pattern */}
         <div className="absolute inset-0">
@@ -102,25 +133,29 @@ const GallerySection = () => {
             style={{
               backgroundImage: `
                 linear-gradient(to right, #57DCDA 1px, transparent 1px),
-                linear-gradient(to bottom, #57DCDA 1px, transparent 1px),
-                radial-gradient(circle, #57DCDA 1px, transparent 1px)
+                linear-gradient(to bottom, #57DCDA 1px, transparent 1px)
               `,
-              backgroundSize: '50px 50px, 50px 50px, 100px 100px',
+              backgroundSize: '40px 40px',
               maskImage: 'radial-gradient(circle at center, black, transparent 80%)'
             }}
           />
         </div>
 
-        {/* Floating Elements */}
-        {[...Array(15)].map((_, i) => (
+        {/* Animated Particles */}
+        {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2"
+            className="absolute rounded-full"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              background: 'linear-gradient(135deg, #57DCDA 0%, #3AADAB 100%)',
-              borderRadius: '50%',
+              width: Math.random() * 4 + 2 + 'px',
+              height: Math.random() * 4 + 2 + 'px',
+              background: `linear-gradient(135deg, 
+                rgba(87,220,218,${Math.random() * 0.5}) 0%, 
+                rgba(58,173,171,${Math.random() * 0.5}) 100%
+              )`,
+              filter: 'blur(1px)'
             }}
             animate={{
               y: [0, -30, 0],
@@ -138,38 +173,42 @@ const GallerySection = () => {
 
       {/* Content Container */}
       <motion.div 
-        className="container relative z-10 px-4"
-        style={{ opacity }}
+        className="container mx-auto px-4 relative z-10"
+        style={{ opacity, scale }}
       >
         {/* Enhanced Section Header */}
         <motion.div
-          className="text-center mb-16"
+          className="text-center mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
         >
-          <div className="inline-block relative mb-4">
+          <div className="relative inline-block">
             <motion.div
-              className="absolute -inset-2 rounded-lg bg-gradient-to-r from-[#57DCDA]/20 to-[#3AADAB]/20 blur-lg"
+              className="absolute -inset-4 rounded-2xl"
+              style={{
+                background: 'radial-gradient(circle at center, rgba(87,220,218,0.15), transparent 70%)',
+                filter: 'blur(20px)'
+              }}
               animate={{
                 opacity: [0.5, 1, 0.5],
                 scale: [0.98, 1.02, 0.98],
               }}
               transition={{
-                duration: 2,
+                duration: 4,
                 repeat: Infinity,
-                repeatType: "reverse"
+                ease: "easeInOut"
               }}
             />
-            <h2 className="relative text-4xl md:text-5xl font-display font-bold mb-6">
+            <h2 className="relative text-5xl md:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent">
                 گالری تصاویر
               </span>
             </h2>
           </div>
           <motion.p 
-            className="text-xl text-gray-300/90 max-w-2xl mx-auto"
+            className="text-xl text-gray-300/90 mt-4 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -191,121 +230,141 @@ const GallerySection = () => {
             <motion.button
               key={category.id}
               className={`
-                px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300
-                flex items-center gap-2 backdrop-blur-sm
+                px-6 py-3 rounded-xl text-sm font-medium
+                backdrop-blur-lg transition-all duration-300
+                flex items-center gap-2 relative overflow-hidden
                 ${activeCategory === category.id
                   ? 'bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] text-white shadow-lg shadow-[#57DCDA]/20'
                   : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:shadow-lg hover:shadow-[#57DCDA]/10'
                 }
               `}
               onClick={() => setActiveCategory(category.id as typeof activeCategory)}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <span className="text-lg">{category.label}</span>
+              <span className="text-lg">{category.icon}</span>
+              <span>{category.label}</span>
+              {activeCategory === category.id && (
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-[#57DCDA]/20 to-[#3AADAB]/20"
+                  layoutId="activeCategory"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
             </motion.button>
           ))}
         </motion.div>
 
-        {/* Enhanced Gallery Grid */}
-        <AnimatePresence mode="wait">
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            layout
-          >
-            {filteredItems.map((item, index) => (
+        {/* Enhanced Masonry Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+          {filteredItems.map((item, index) => (
+            <motion.div
+              key={item.id}
+              layout
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className={`relative ${
+                item.size === 'large' ? 'lg:col-span-2 lg:row-span-2' :
+                item.size === 'medium' ? 'lg:row-span-2' :
+                ''
+              }`}
+            >
               <motion.div
-                key={item.id}
-                className={`group relative rounded-2xl cursor-pointer ${
-                  item.size === 'large' ? 'md:col-span-2 md:row-span-2' :
-                  item.size === 'medium' ? 'md:col-span-1 md:row-span-2' :
-                  'md:col-span-1 md:row-span-1'
-                }`}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group relative rounded-2xl overflow-hidden cursor-pointer"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => setSelectedImage(item)}
                 onHoverStart={() => setHoveredItem(item.id)}
                 onHoverEnd={() => setHoveredItem(null)}
-                onClick={() => setSelectedImage(item)}
               >
-                {/* Enhanced Image Container */}
-                <div className="relative w-full">
-                  <div className={`relative ${
-                    item.size === 'large' ? 'pb-[66.67%]' : // 3:2 aspect ratio for large images
-                    item.size === 'medium' ? 'pb-[125%]' : // 4:5 aspect ratio for medium images
-                    'pb-[100%]' // 1:1 aspect ratio for small images
-                  }`}>
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent z-10"
-                      initial={{ opacity: 0.5 }}
-                      animate={{ 
-                        opacity: hoveredItem === item.id ? 0.7 : 0.5 
+                {/* Image Container */}
+                <div className={`relative ${
+                  item.size === 'large' ? 'pb-[66.67%]' :
+                  item.size === 'medium' ? 'pb-[125%]' :
+                  'pb-[100%]'
+                }`}>
+                  <motion.div
+                    className="absolute inset-0 z-10"
+                    style={{
+                      background: `linear-gradient(to bottom, 
+                        transparent,
+                        ${item.color}20,
+                        ${item.color}40
+                      )`
+                    }}
+                    initial={{ opacity: 0.5 }}
+                    animate={{ 
+                      opacity: hoveredItem === item.id ? 0.8 : 0.5 
+                    }}
+                    transition={{ duration: 0.3 }}
+                  />
+                  <motion.img
+                    src={item.image}
+                    alt={item.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    initial={{ scale: 1 }}
+                    animate={{ 
+                      scale: hoveredItem === item.id ? 1.1 : 1 
+                    }}
+                    transition={{ duration: 0.7 }}
+                  />
+
+                  {/* Content Overlay */}
+                  <motion.div
+                    className="absolute inset-0 z-20 p-8 flex flex-col justify-end"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ 
+                      opacity: hoveredItem === item.id ? 1 : 0.8,
+                      y: hoveredItem === item.id ? 0 : 20
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <motion.h3 
+                      className="text-2xl font-bold mb-3"
+                      style={{
+                        color: item.color
                       }}
-                      transition={{ duration: 0.3 }}
-                    />
-                    <motion.img
-                      src={item.image}
-                      alt={item.title}
-                      className="absolute inset-0 w-full h-full object-cover rounded-2xl"
-                      initial={{ scale: 1 }}
+                    >
+                      {item.title}
+                    </motion.h3>
+                    <motion.p 
+                      className="text-gray-200 text-sm leading-relaxed"
+                      initial={{ opacity: 0 }}
                       animate={{ 
-                        scale: hoveredItem === item.id ? 1.1 : 1 
-                      }}
-                      transition={{ duration: 0.7 }}
-                    />
-                    
-                    {/* Enhanced Content Overlay */}
-                    <motion.div
-                      className="absolute inset-0 z-20 p-8 flex flex-col justify-end"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ 
-                        opacity: hoveredItem === item.id ? 1 : 0.8,
-                        y: hoveredItem === item.id ? 0 : 20
+                        opacity: hoveredItem === item.id ? 1 : 0 
                       }}
                       transition={{ duration: 0.3 }}
                     >
-                      <motion.h3 
-                        className="text-2xl font-bold text-white mb-3"
-                        layout
-                      >
-                        {item.title}
-                      </motion.h3>
-                      <motion.p 
-                        className="text-gray-200 text-sm leading-relaxed"
-                        initial={{ opacity: 0 }}
-                        animate={{ 
-                          opacity: hoveredItem === item.id ? 1 : 0 
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        {item.description}
-                      </motion.p>
-                    </motion.div>
+                      {item.description}
+                    </motion.p>
+                  </motion.div>
 
-                    {/* Hover Border Effect */}
-                    <motion.div
-                      className="absolute inset-0 rounded-2xl border-2 border-[#57DCDA]/0"
-                      animate={{ 
-                        borderColor: hoveredItem === item.id ? 'rgba(87, 220, 218, 0.5)' : 'rgba(87, 220, 218, 0)'
-                      }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </div>
+                  {/* Enhanced Hover Effects */}
+                  <motion.div
+                    className="absolute inset-0 rounded-2xl"
+                    style={{
+                      boxShadow: `inset 0 0 0 2px ${item.color}00`
+                    }}
+                    animate={{ 
+                      boxShadow: hoveredItem === item.id 
+                        ? `inset 0 0 0 2px ${item.color}80`
+                        : `inset 0 0 0 2px ${item.color}00`
+                    }}
+                    transition={{ duration: 0.3 }}
+                  />
                 </div>
               </motion.div>
-            ))}
-          </motion.div>
-        </AnimatePresence>
+            </motion.div>
+          ))}
+        </div>
 
         {/* Enhanced Modal */}
         <AnimatePresence>
           {selectedImage && (
             <motion.div
-              className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-lg"
+              className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 backdrop-blur-xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -319,29 +378,57 @@ const GallerySection = () => {
                 onClick={e => e.stopPropagation()}
               >
                 <div className="relative">
-                  <img
+                  <motion.img
                     src={selectedImage.image}
                     alt={selectedImage.title}
                     className="w-full h-auto"
+                    initial={{ scale: 1.1 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.4 }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0c1525] to-transparent" />
+                  <motion.div 
+                    className="absolute inset-0"
+                    style={{
+                      background: `linear-gradient(to bottom, 
+                        transparent,
+                        ${selectedImage.color}20,
+                        ${selectedImage.color}40,
+                        #0c1525
+                      )`
+                    }}
+                  />
                 </div>
                 <div className="p-8">
-                  <h3 className="text-3xl font-bold bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent mb-4">
+                  <motion.h3 
+                    className="text-3xl font-bold mb-4"
+                    style={{
+                      color: selectedImage.color
+                    }}
+                  >
                     {selectedImage.title}
-                  </h3>
-                  <p className="text-gray-300 text-lg leading-relaxed">
+                  </motion.h3>
+                  <motion.p 
+                    className="text-gray-300 text-lg leading-relaxed"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                  >
                     {selectedImage.description}
-                  </p>
+                  </motion.p>
                 </div>
-                <button
-                  className="absolute top-6 right-6 text-white p-3 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm transition-all duration-300 hover:scale-110"
+                <motion.button
+                  className="absolute top-6 right-6 text-white p-3 rounded-full backdrop-blur-xl transition-all duration-300"
+                  style={{
+                    background: `linear-gradient(135deg, ${selectedImage.color}40, ${selectedImage.color}20)`
+                  }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={() => setSelectedImage(null)}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
-                </button>
+                </motion.button>
               </motion.div>
             </motion.div>
           )}
