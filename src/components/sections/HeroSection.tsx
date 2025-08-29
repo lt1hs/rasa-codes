@@ -1,25 +1,30 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import logoVertical from '../../assets/main-r-logo-ver.png';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import logoVertical from '../../assets/main-r-logo-ver.png';
+import OptimizedImage from '../ui/OptimizedImage';
+import { useInView } from '../../hooks/useInView';
 
 const HeroSection = () => {
   const [isBackgroundLoaded, setIsBackgroundLoaded] = useState(false);
-  const [shouldLoadBackground, setShouldLoadBackground] = useState(false);
+  const [backgroundRef, inView] = useInView({ threshold: 0.1 }); // Load when 10% visible
   const { scrollYProgress } = useScroll();
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '5%']);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  // Delay loading the background for better initial page load
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShouldLoadBackground(true);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
   // Check for reduced motion preference
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Load background when in view
+  useEffect(() => {
+    if (inView && !prefersReducedMotion) {
+      // Add a small delay to ensure other critical assets load first
+      const timer = setTimeout(() => {
+        setIsBackgroundLoaded(true);
+      }, 500); // Reduced delay from 1000ms to 500ms
+      return () => clearTimeout(timer);
+    }
+  }, [inView, prefersReducedMotion]);
 
   // Refined animation variants
   const containerVariants = {
@@ -49,9 +54,12 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative overflow-hidden min-h-screen flex items-center justify-center pt-24 pb-32 lg:pt-32 lg:pb-40 bg-secondary">
+    <section 
+      ref={backgroundRef} // Attach ref to the section
+      className="relative overflow-hidden min-h-screen flex items-center justify-center pt-24 pb-32 lg:pt-32 lg:pb-40 bg-secondary"
+    >
       {/* Optimized Background */}
-      {shouldLoadBackground && !prefersReducedMotion && (
+      {inView && !prefersReducedMotion && ( // Load only when in view
         <div className="absolute inset-0 w-full h-full">
           <iframe
             src="https://my.spline.design/retrofuturisticcircuitloop-ejlJpJAewVvJgEkK2cUajKzb/"
@@ -69,6 +77,7 @@ const HeroSection = () => {
               transition: 'opacity 0.5s ease-in-out'
             }}
             onLoad={() => setIsBackgroundLoaded(true)}
+            loading="lazy" // Add lazy loading attribute
           />
           {/* Optimized overlay with reduced blur */}
           <div className="absolute inset-0 bg-gradient-to-b from-secondary/80 via-secondary/60 to-secondary/80" />
@@ -76,7 +85,7 @@ const HeroSection = () => {
       )}
 
       {/* Loading state */}
-      {shouldLoadBackground && !isBackgroundLoaded && !prefersReducedMotion && (
+      {inView && !isBackgroundLoaded && !prefersReducedMotion && ( // Show loading only when in view and not loaded
         <div className="absolute inset-0 flex items-center justify-center bg-secondary">
           <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
         </div>
@@ -163,10 +172,10 @@ const HeroSection = () => {
           initial="hidden"
           animate="visible"
         >
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-6 md:gap-8">
             {[
               {
-                title: "طراحی و نورپردازی",
+                title: " نورپردازی",
                 color: "#57DCDA",
                 delay: 0
               },
@@ -184,6 +193,11 @@ const HeroSection = () => {
                 title: "هوشمندسازی و اتوماسیون",
                 color: "#9D4EDD",
                 delay: 0.6
+              },
+              {
+                title: "طراحی",
+                color: "#FFC107",
+                delay: 0.8
               }
             ].map((card, index) => (
               <motion.div
@@ -247,4 +261,4 @@ const HeroSection = () => {
   );
 };
 
-export default HeroSection; 
+export default HeroSection;

@@ -77,7 +77,7 @@ const RasaSmartCaseSection = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            کیف هوشمند راسا، ترکیبی از تکنولوژی و طراحی مدرن
+            کیس هوشمند راسا، ترکیبی از تکنولوژی و طراحی مدرن
           </motion.p>
         </div>
 

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import Layout from '../components/layout/Layout';
+// import Layout from '../components/layout/Layout';
 import ParticleBackground from '../components/ui/ParticleBackground';
 import SectionWrapper from '../components/ui/SectionWrapper';
 import ServiceCard from '../components/ui/ServiceCard';
@@ -67,7 +67,7 @@ const services: Service[] = [
 
 const FeaturesPage = () => {
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <section className="min-h-[90vh] flex items-center justify-center pt-20 pb-16 relative overflow-hidden">
         <ParticleBackground />
@@ -142,7 +142,7 @@ const FeaturesPage = () => {
           </motion.a>
         </motion.div>
       </SectionWrapper>
-    </Layout>
+    </>
   );
 };
 

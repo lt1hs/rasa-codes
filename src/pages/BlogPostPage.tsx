@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Layout from '../components/layout/Layout';
+// import Layout from '../components/layout/Layout';
 
 const BlogPostPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -9,65 +9,65 @@ const BlogPostPage = () => {
   // This would typically come from an API or CMS, hardcoded for demo
   const post = {
     id: postId,
-    title: 'كيف يغير الذكاء الاصطناعي مستقبل الأعمال',
+    title: 'هوش مصنوعی چگونه آینده کسب‌وکار را تغییر می‌دهد',
     content: `
-      <p>في عالم متسارع التطور، تبرز تقنيات الذكاء الاصطناعي كمحرك رئيسي للتغيير في مختلف الصناعات والقطاعات. يتناول هذا المقال كيفية تأثير الذكاء الاصطناعي على مستقبل الأعمال والفرص التي يوفرها للشركات.</p>
+      <p>در دنیایی با توسعه پرشتاب، فناوری‌های هوش مصنوعی به عنوان یک محرک اصلی تغییر در صنایع و بخش‌های مختلف برجسته می‌شوند. این مقاله به بررسی تأثیر هوش مصنوعی بر آینده کسب‌وکار و فرصت‌هایی که برای شرکت‌ها فراهم می‌کند، می‌پردازد.</p>
       
-      <h2>تحسين الكفاءة التشغيلية</h2>
-      <p>تساهم تقنيات الذكاء الاصطناعي في تحسين الكفاءة التشغيلية للشركات من خلال أتمتة المهام الروتينية وتبسيط العمليات. يمكن للروبوتات البرمجية وأنظمة التعلم الآلي تنفيذ المهام المتكررة بدقة أعلى وسرعة أكبر، مما يحرر الموظفين للتركيز على المهام الإبداعية وذات القيمة المضافة العالية.</p>
+      <h2>بهبود کارایی عملیاتی</h2>
+      <p>فناوری‌های هوش مصنوعی با خودکارسازی وظایف روتین و ساده‌سازی فرآیندها به بهبود کارایی عملیاتی شرکت‌ها کمک می‌کنند. ربات‌های نرم‌افزاری و سیستم‌های یادگیری ماشین می‌توانند وظایف تکراری را با دقت و سرعت بالاتری انجام دهند، که این امر کارکنان را برای تمرکز بر وظایف خلاقانه و با ارزش افزوده بالا آزاد می‌کند.</p>
       
-      <h2>تعزيز تجربة العملاء</h2>
-      <p>توفر تقنيات الذكاء الاصطناعي فرصًا غير مسبوقة لتحسين تجربة العملاء. من خلال تحليل بيانات المستخدمين وأنماط السلوك، يمكن للشركات تقديم تجارب مخصصة وتوصيات دقيقة تلبي احتياجات العملاء بشكل أفضل. كما تساهم روبوتات المحادثة والمساعدين الافتراضيين في توفير دعم فوري على مدار الساعة.</p>
+      <h2>ارتقاء تجربه مشتری</h2>
+      <p>فناوری‌های هوش مصنوعی فرصت‌های بی‌سابقه‌ای برای بهبود تجربه مشتری فراهم می‌کنند. با تحلیل داده‌های کاربران و الگوهای رفتاری، شرکت‌ها می‌توانند تجربیات شخصی‌سازی شده و توصیه‌های دقیقی ارائه دهند که نیازهای مشتریان را بهتر برآورده سازد. همچنین چت‌بات‌ها و دستیاران مجازی به ارائه پشتیبانی فوری و 24 ساعته کمک می‌کنند.</p>
       
-      <h2>تحسين اتخاذ القرارات</h2>
-      <p>تساعد تقنيات الذكاء الاصطناعي في تحويل البيانات الضخمة إلى رؤى قابلة للتنفيذ، مما يمكّن صناع القرار من اتخاذ قرارات أكثر استنارة وفعالية. تستطيع خوارزميات التعلم الآلي تحليل كميات هائلة من البيانات واكتشاف الأنماط والاتجاهات التي قد تفوت العين البشرية.</p>
+      <h2>بهبود تصمیم‌گیری</h2>
+      <p>فناوری‌های هوش مصنوعی به تبدیل داده‌های بزرگ به بینش‌های قابل اجرا کمک می‌کنند، که این امر تصمیم‌گیرندگان را قادر می‌سازد تا تصمیمات آگاهانه‌تر و مؤثرتری بگیرند. الگوریتم‌های یادگیری ماشین می‌توانند حجم عظیمی از داده‌ها را تحلیل کرده و الگوها و روندهایی را کشف کنند که ممکن است از چشم انسان پنهان بماند.</p>
       
-      <h2>تطوير منتجات وخدمات جديدة</h2>
-      <p>يفتح الذكاء الاصطناعي آفاقًا جديدة للابتكار وتطوير منتجات وخدمات لم تكن ممكنة سابقًا. من السيارات ذاتية القيادة إلى أنظمة التشخيص الطبي المتقدمة، تتيح هذه التقنيات للشركات إعادة تصور نماذج أعمالها وخلق قيمة جديدة للعملاء.</p>
+      <h2>توسعه محصولات و خدمات جدید</h2>
+      <p>هوش مصنوعی افق‌های جدیدی برای نوآوری و توسعه محصولات و خدماتی که قبلاً امکان‌پذیر نبودند، می‌گشاید. از خودروهای خودران گرفته تا سیستم‌های پیشرفته تشخیص پزشکی، این فناوری‌ها به شرکت‌ها امکان می‌دهند تا مدل‌های کسب‌وکار خود را بازتعریف کرده و ارزش جدیدی برای مشتریان ایجاد کنند.</p>
       
-      <h2>التحديات والاعتبارات الأخلاقية</h2>
-      <p>مع الفرص الهائلة التي يوفرها الذكاء الاصطناعي، تأتي أيضًا تحديات واعتبارات أخلاقية مهمة. تشمل هذه القضايا الخصوصية وأمن البيانات، والتحيز في الخوارزميات، وتأثير الأتمتة على الوظائف. يجب على الشركات التعامل مع هذه القضايا بعناية وتبني نهج مسؤول في تطبيق تقنيات الذكاء الاصطناعي.</p>
+      <h2>چالش‌ها و ملاحظات اخلاقی</h2>
+      <p>با فرصت‌های عظیمی که هوش مصنوعی فراهم می‌کند، چالش‌ها و ملاحظات اخلاقی مهمی نیز همراه است. این مسائل شامل حفظ حریم خصوصی و امنیت داده‌ها، سوگیری در الگوریتم‌ها، و تأثیر اتوماسیون بر مشاغل می‌شوند. شرکت‌ها باید با دقت با این مسائل برخورد کرده و رویکردی مسئولانه در به‌کارگیری فناوری‌های هوش مصنوعی اتخاذ کنند.</p>
       
-      <h2>الخلاصة</h2>
-      <p>في ختام المقال، يتضح أن الذكاء الاصطناعي سيستمر في إحداث تحولات جذرية في مستقبل الأعمال. ستكون الشركات التي تتبنى هذه التقنيات وتدمجها بشكل استراتيجي في نماذج أعمالها هي الأكثر نجاحًا في المستقبل. ومع ذلك، من المهم أن يتم ذلك بطريقة مسؤولة ومستدامة تراعي الاعتبارات الأخلاقية والاجتماعية.</p>
+      <h2>نتیجه‌گیری</h2>
+      <p>در پایان مقاله، مشخص می‌شود که هوش مصنوعی به ایجاد تحولات ریشه‌ای در آینده کسب‌وکار ادامه خواهد داد. شرکت‌هایی که این فناوری‌ها را به کار می‌گیرند و به صورت استراتژیک در مدل‌های کسب‌وکار خود ادغام می‌کنند، در آینده موفق‌تر خواهند بود. با این حال، مهم است که این کار به شیوه‌ای مسئولانه و پایدار انجام شود که ملاحظات اخلاقی و اجتماعی را در نظر بگیرد.</p>
     `,
     imageUrl: 'https://picsum.photos/seed/ai1/1200/600',
-    category: { id: 'ai', name: 'الذكاء الاصطناعي' },
+    category: { id: 'ai', name: 'هوش مصنوعی' },
     author: {
-      name: 'أحمد الشمري',
-      role: 'المؤسس والرئيس التنفيذي',
+      name: 'احمد الشمری',
+      role: 'بنیانگذار و مدیرعامل',
       image: 'https://i.pravatar.cc/300?img=11',
-      bio: 'خبير في الذكاء الاصطناعي مع أكثر من 15 عامًا من الخبرة في قيادة شركات التكنولوجيا'
+      bio: 'کارشناس هوش مصنوعی با بیش از 15 سال تجربه در رهبری شرکت‌های فناوری'
     },
-    date: '15 يونيو 2023',
-    readTime: '7 دقائق',
-    tags: ['الذكاء الاصطناعي', 'أتمتة الأعمال', 'التحول الرقمي', 'المستقبل']
+    date: '15 ژوئن 2023',
+    readTime: '7 دقیقه',
+    tags: ['هوش مصنوعی', 'اتوماسیون کسب‌وکار', 'تحول دیجیتال', 'آینده']
   };
   
   // Related posts (in a real app, these would be fetched based on tags or categories)
   const relatedPosts = [
     {
       id: 5,
-      title: 'التعلم المعزز: الجيل القادم من الذكاء الاصطناعي',
-      excerpt: 'استكشاف كيفية استخدام تقنيات التعلم المعزز لتطوير نماذج ذكاء اصطناعي أكثر تقدماً وقدرة على التكيف.',
+      title: 'یادگیری تقویتی: نسل بعدی هوش مصنوعی',
+      excerpt: 'کاوش در نحوه استفاده از تکنیک‌های یادگیری تقویتی برای توسعه مدل‌های هوش مصنوعی پیشرفته‌تر و سازگارتر.',
       imageUrl: 'https://picsum.photos/seed/ai5/800/600',
       category: 'ai',
-      author: 'أحمد الشمري',
-      date: '19 فبراير 2023',
+      author: 'احمد الشمری',
+      date: '19 فوریه 2023',
     },
     {
       id: 2,
-      title: 'تقنيات التعلم العميق وتطبيقاتها في الرؤية الحاسوبية',
-      excerpt: 'تعرف على أحدث التقنيات في مجال التعلم العميق وكيفية تطبيقها في أنظمة الرؤية الحاسوبية.',
+      title: 'تکنیک‌های یادگیری عمیق و کاربردهای آن در بینایی کامپیوتری',
+      excerpt: 'با جدیدترین تکنیک‌ها در زمینه یادگیری عمیق و نحوه کاربرد آن‌ها در سیستم‌های بینایی کامپیوتری آشنا شوید.',
       imageUrl: 'https://picsum.photos/seed/ml2/800/600',
       category: 'ml',
-      author: 'سارة العبدالله',
-      date: '22 مايو 2023',
+      author: 'ساره العبدالله',
+      date: '22 مه 2023',
     }
   ];
 
   return (
-    <Layout>
+    <>
       {/* Hero Section with Featured Image */}
       <section className="pt-32 pb-16 relative overflow-hidden">
         {/* Background elements */}
@@ -80,9 +80,9 @@ const BlogPostPage = () => {
           <div className="max-w-4xl mx-auto">
             {/* Breadcrumbs */}
             <div className="flex items-center text-sm text-gray-400 mb-6">
-              <Link to="/" className="hover:text-primary transition-colors">الرئيسية</Link>
+              <Link to="/" className="hover:text-primary transition-colors">صفحه اصلی</Link>
               <span className="mx-2">/</span>
-              <Link to="/blog" className="hover:text-primary transition-colors">المدونة</Link>
+              <Link to="/blog" className="hover:text-primary transition-colors">وبلاگ</Link>
               <span className="mx-2">/</span>
               <span className="text-gray-300">{post.category.name}</span>
             </div>
@@ -175,7 +175,7 @@ const BlogPostPage = () => {
               
               {/* Tags */}
               <div className="mt-12 pt-8 border-t border-white/10">
-                <h3 className="text-lg font-semibold mb-4">الوسوم:</h3>
+                <h3 className="text-lg font-semibold mb-4">برچسب‌ها:</h3>
                 <div className="flex flex-wrap gap-2">
                   {post.tags.map((tag, index) => (
                     <Link 
@@ -191,7 +191,7 @@ const BlogPostPage = () => {
               
               {/* Share Section */}
               <div className="mt-8 pt-8 border-t border-white/10">
-                <h3 className="text-lg font-semibold mb-4">شارك المقال:</h3>
+                <h3 className="text-lg font-semibold mb-4">مقاله را به اشتراک بگذارید:</h3>
                 <div className="flex gap-3">
                   {['twitter', 'facebook', 'linkedin', 'whatsapp'].map((social) => (
                     <motion.a 
@@ -225,7 +225,7 @@ const BlogPostPage = () => {
             <div className="lg:col-span-4">
               {/* Author Card */}
               <div className="glass-card p-6 rounded-xl border border-white/10 mb-8">
-                <h3 className="text-lg font-semibold mb-4">عن الكاتب</h3>
+                <h3 className="text-lg font-semibold mb-4">درباره نویسنده</h3>
                 <div className="flex items-center mb-4">
                   <img 
                     src={post.author.image} 
@@ -243,14 +243,14 @@ const BlogPostPage = () => {
                     to={`/author/${post.author.name.replace(/\s+/g, '-').toLowerCase()}`}
                     className="text-primary hover:text-primary-light transition-colors text-sm font-medium"
                   >
-                    عرض جميع مقالات الكاتب
+                    مشاهده همه مقالات نویسنده
                   </Link>
                 </div>
               </div>
               
               {/* Related Posts */}
               <div className="glass-card p-6 rounded-xl border border-white/10">
-                <h3 className="text-lg font-semibold mb-4">مقالات ذات صلة</h3>
+                <h3 className="text-lg font-semibold mb-4">مقالات مرتبط</h3>
                 <div className="space-y-6">
                   {relatedPosts.map((relatedPost) => (
                     <div key={relatedPost.id} className="flex gap-4">
@@ -278,7 +278,7 @@ const BlogPostPage = () => {
                     to="/blog"
                     className="text-primary hover:text-primary-light transition-colors text-sm font-medium"
                   >
-                    عرض جميع المقالات
+                    مشاهده همه مقالات
                   </Link>
                 </div>
               </div>
@@ -292,7 +292,7 @@ const BlogPostPage = () => {
         <div className="container">
           <div className="flex flex-col md:flex-row justify-between gap-8">
             <div className="md:w-1/2">
-              <span className="block text-sm text-gray-400 mb-2">المقال السابق</span>
+              <span className="block text-sm text-gray-400 mb-2">مقاله قبلی</span>
               <Link 
                 to={`/blog/${postId - 1 > 0 ? postId - 1 : 1}`} 
                 className="flex items-center text-lg font-semibold hover:text-primary transition-colors"
@@ -300,17 +300,17 @@ const BlogPostPage = () => {
                 <svg className="w-5 h-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                التعلم المعزز: الجيل القادم من الذكاء الاصطناعي
+                یادگیری تقویتی: نسل بعدی هوش مصنوعی
               </Link>
             </div>
             
             <div className="md:w-1/2 text-left">
-              <span className="block text-sm text-gray-400 mb-2">المقال التالي</span>
+              <span className="block text-sm text-gray-400 mb-2">مقاله بعدی</span>
               <Link 
                 to={`/blog/${postId + 1}`} 
                 className="flex items-center justify-end text-lg font-semibold hover:text-primary transition-colors"
               >
-                تقنيات التعلم العميق وتطبيقاتها في الرؤية الحاسوبية
+                تکنیک‌های یادگیری عمیق و کاربردهای آن در بینایی کامپیوتری
                 <svg className="w-5 h-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
@@ -319,8 +319,8 @@ const BlogPostPage = () => {
           </div>
         </div>
       </section>
-    </Layout>
+    </>
   );
 };
 
-export default BlogPostPage; 
+export default BlogPostPage;

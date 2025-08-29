@@ -9,51 +9,51 @@ const PricingPage = () => {
   // Pricing plans
   const plans = [
     {
-      name: 'أساسي',
-      description: 'للأفراد والشركات الناشئة',
+      name: 'پایه',
+      description: 'برای افراد و استارتاپ‌ها',
       monthlyPrice: 99,
       annualPrice: 79,
       features: [
-        'تحليل البيانات الأساسي',
-        'دعم الذكاء الاصطناعي',
-        'تحديثات شهرية',
-        'دعم فني عبر البريد الإلكتروني',
-        'تخزين 10 جيجابايت',
+        'تحلیل داده پایه',
+        'پشتیبانی هوش مصنوعی',
+        'به روزرسانی‌های ماهانه',
+        'پشتیبانی فنی از طریق ایمیل',
+        '10 گیگابایت فضای ذخیره‌سازی',
       ],
       color: '#FF8301',
       popular: false,
     },
     {
-      name: 'احترافي',
-      description: 'للشركات المتوسطة',
+      name: 'حرفه‌ای',
+      description: 'برای کسب‌وکارهای متوسط',
       monthlyPrice: 199,
       annualPrice: 159,
       features: [
-        'تحليل البيانات المتقدم',
-        'معالجة اللغة الطبيعية',
-        'تحديثات أسبوعية',
-        'دعم فني متقدم على مدار الساعة',
-        'تخزين 50 جيجابايت',
-        'تكامل مع الأنظمة الأخرى',
-        'تدريب مخصص',
+        'تحلیل داده پیشرفته',
+        'پردازش زبان طبیعی',
+        'به روزرسانی‌های هفتگی',
+        'پشتیبانی فنی پیشرفته 24/7',
+        '50 گیگابایت فضای ذخیره‌سازی',
+        'یکپارچه‌سازی با سیستم‌های دیگر',
+        'آموزش اختصاصی',
       ],
       color: '#57DCDA',
       popular: true,
     },
     {
-      name: 'مؤسسات',
-      description: 'للشركات الكبيرة',
+      name: 'سازمانی',
+      description: 'برای شرکت‌های بزرگ',
       monthlyPrice: 399,
       annualPrice: 319,
       features: [
-        'تحليل بيانات متقدم بلا حدود',
-        'تطوير نماذج مخصصة',
-        'تحديثات فورية',
-        'دعم فني احترافي 24/7',
-        'تخزين غير محدود',
-        'تدريب وتأهيل الفريق',
-        'حلول مخصصة',
-        'مدير حساب متخصص',
+        'تحلیل داده پیشرفته نامحدود',
+        'توسعه مدل‌های سفارشی',
+        'به روزرسانی‌های فوری',
+        'پشتیبانی فنی حرفه‌ای 24/7',
+        'فضای ذخیره‌سازی نامحدود',
+        'آموزش و توانمندسازی تیم',
+        'راه‌حل‌های سفارشی',
+        'مدیر حساب اختصاصی',
       ],
       color: '#FF8301',
       popular: false,
@@ -90,10 +90,10 @@ const PricingPage = () => {
             transition={{ duration: 0.7 }}
           >
             <h1 className="text-5xl md:text-6xl font-display font-bold mb-6">
-              خطط <span className="gradient-text">الأسعار</span> المرنة
+              طرح‌های <span className="gradient-text">قیمت‌گذاری</span> منعطف
             </h1>
             <p className="text-xl text-gray-300 mb-8">
-              اختر الخطة المناسبة لاحتياجاتك واستفد من أحدث تقنيات الذكاء الاصطناعي لتطوير أعمالك
+              طرح مناسب با نیازهای خود را انتخاب کنید و از جدیدترین فناوری‌های هوش مصنوعی برای توسعه کسب‌وکار خود بهره‌مند شوید.
             </p>
           </motion.div>
         </div>
@@ -114,14 +114,14 @@ const PricingPage = () => {
                 className={`px-6 py-3 rounded-full font-medium transition ${!annualBilling ? 'bg-primary text-white' : 'hover:text-primary'}`}
                 onClick={() => setAnnualBilling(false)}
               >
-                فوترة شهرية
+                صورت‌حساب ماهانه
               </button>
               <button 
                 className={`px-6 py-3 rounded-full font-medium transition flex items-center gap-2 ${annualBilling ? 'bg-primary text-white' : 'hover:text-primary'}`}
                 onClick={() => setAnnualBilling(true)}
               >
-                <span>فوترة سنوية</span>
-                <span className="bg-accent/20 text-accent text-xs px-2 py-1 rounded-full">خصم 20%</span>
+                <span>صورت‌حساب سالانه</span>
+                <span className="bg-accent/20 text-accent text-xs px-2 py-1 rounded-full">20% تخفیف</span>
               </button>
             </div>
           </motion.div>
@@ -147,7 +147,7 @@ const PricingPage = () => {
                 {plan.popular && (
                   <div className="absolute -top-4 inset-x-0 flex justify-center">
                     <div className="bg-gradient-to-l from-primary to-accent px-4 py-1 rounded-full text-white text-sm font-medium">
-                      الأكثر شيوعًا
+                      محبوب‌ترین
                     </div>
                   </div>
                 )}
@@ -175,17 +175,17 @@ const PricingPage = () => {
                   {/* Price */}
                   <div className="flex justify-center mb-8">
                     <div className="text-center">
-                      <p className="text-sm text-gray-400 mb-1">ابتداءً من</p>
+                      <p className="text-sm text-gray-400 mb-1">شروع از</p>
                       <div className="flex items-end justify-center">
                         <span className="text-4xl font-display font-bold gradient-text">
                           {annualBilling ? plan.annualPrice : plan.monthlyPrice}
                         </span>
                         <span className="text-xl text-gray-300 mb-1">$</span>
-                        <span className="text-gray-400 mr-2">/{annualBilling ? 'شهرياً' : 'شهرياً'}</span>
+                        <span className="text-gray-400 mr-2">/{annualBilling ? 'ماهانه' : 'ماهانه'}</span>
                       </div>
                       {annualBilling && (
                         <p className="text-sm text-accent mt-1">
-                          يدفع سنوياً (توفير ${(plan.monthlyPrice - plan.annualPrice) * 12}$)
+                          پرداخت سالانه (صرفه‌جویی ${(plan.monthlyPrice - plan.annualPrice) * 12}$)
                         </p>
                       )}
                     </div>
@@ -221,7 +221,7 @@ const PricingPage = () => {
                       href="/signup" 
                       className={`w-full py-3 px-8 rounded-lg font-medium transition-all flex justify-center items-center ${plan.popular ? 'bg-gradient-to-l from-primary to-accent text-white' : 'bg-white/10 hover:bg-white/20 text-white'}`}
                     >
-                      اختر الخطة
+                      طرح را انتخاب کنید
                     </a>
                   </motion.div>
                 </div>
@@ -255,26 +255,26 @@ const PricingPage = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
             >
-              الأسئلة <span className="gradient-text">الشائعة</span>
+              سوالات <span className="gradient-text">متداول</span>
             </motion.h2>
             
             <div className="space-y-6">
               {[
                 {
-                  q: 'هل يمكنني تغيير خطتي لاحقاً؟',
-                  a: 'نعم، يمكنك الترقية أو تخفيض خطتك في أي وقت. ستتم محاسبة التغييرات بشكل تناسبي على الفترة المتبقية.'
+                  q: 'آیا می‌توانم بعداً طرح خود را تغییر دهم؟',
+                  a: 'بله، شما می‌توانید در هر زمان طرح خود را ارتقا دهید یا کاهش دهید. تغییرات به صورت متناسب برای باقیمانده دوره محاسبه خواهد شد.'
                 },
                 {
-                  q: 'هل هناك فترة تجريبية مجانية؟',
-                  a: 'نعم، نقدم فترة تجريبية مجانية لمدة 14 يومًا لجميع الخطط دون الحاجة إلى بطاقة ائتمان.'
+                  q: 'آیا دوره آزمایشی رایگان وجود دارد؟',
+                  a: 'بله، ما یک دوره آزمایشی 14 روزه رایگان برای تمامی طرح‌ها بدون نیاز به کارت اعتباری ارائه می‌دهیم.'
                 },
                 {
-                  q: 'ما وسائل الدفع المقبولة؟',
-                  a: 'نقبل بطاقات الائتمان الرئيسية (فيزا، ماستركارد، أمريكان إكسبريس) وكذلك باي بال. للمؤسسات، نقدم أيضًا خيارات الدفع عن طريق التحويل المصرفي.'
+                  q: 'روش‌های پرداخت قابل قبول چیست؟',
+                  a: 'ما کارت‌های اعتباری اصلی (ویزا، مسترکارت، امریکن اکسپرس) و همچنین پی‌پال را می‌پذیریم. برای سازمان‌ها، گزینه‌های پرداخت از طریق حواله بانکی را نیز ارائه می‌دهیم.'
                 },
                 {
-                  q: 'هل هناك دعم فني متاح؟',
-                  a: 'نعم، جميع الخطط تتضمن دعم فني. تتمتع الخطط المتقدمة بدعم ذي أولوية وخدمة مدار الساعة طوال أيام الأسبوع.'
+                  q: 'آیا پشتیبانی فنی در دسترس است؟',
+                  a: 'بله، تمامی طرح‌ها شامل پشتیبانی فنی می‌شوند. طرح‌های پیشرفته از پشتیبانی با اولویت و خدمات 24/7 برخوردارند.'
                 },
               ].map((faq, i) => (
                 <motion.div 
@@ -309,7 +309,7 @@ const PricingPage = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.7 }}
                 >
-                  تحتاج حلولاً <span className="gradient-text">مخصصة</span>؟
+                  به راه‌حل‌های <span className="gradient-text">سفارشی</span> نیاز دارید؟
                 </motion.h2>
                 
                 <motion.p 
@@ -319,7 +319,7 @@ const PricingPage = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.7, delay: 0.1 }}
                 >
-                  نقدم حلولًا مخصصة للشركات الكبيرة والمؤسسات التي تحتاج إلى مزايا وإمكانيات خاصة. تواصل مع فريقنا للحصول على عرض مخصص يلبي احتياجاتك.
+                  ما راه‌حل‌های سفارشی برای شرکت‌های بزرگ و سازمان‌هایی که به ویژگی‌ها و قابلیت‌های خاص نیاز دارند، ارائه می‌دهیم. برای دریافت یک پیشنهاد سفارشی که نیازهای شما را برآورده کند، با تیم ما تماس بگیرید.
                 </motion.p>
                 
                 <motion.div
@@ -328,7 +328,7 @@ const PricingPage = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.7, delay: 0.2 }}
                 >
-                  <a href="/contact" className="btn btn-primary px-8">تواصل معنا</a>
+                  <a href="/contact" className="btn btn-primary px-8">با ما تماس بگیرید</a>
                 </motion.div>
               </div>
               
@@ -369,4 +369,4 @@ const PricingPage = () => {
   );
 };
 
-export default PricingPage; 
+export default PricingPage;

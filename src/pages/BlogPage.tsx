@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import Layout from '../components/layout/Layout';
+// import Layout from '../components/layout/Layout';
 
 // Define TypeScript interfaces
 interface Author {
@@ -42,33 +42,33 @@ const BlogPage = () => {
   const categories: Category[] = [
     { 
       id: 'all', 
-      name: 'جميع المقالات',
+      name: 'همه مقالات',
       icon: '🌟',
-      description: 'عرض جميع المقالات المتاحة'
+      description: 'مشاهده همه مقالات موجود'
     },
     { 
       id: 'ai', 
-      name: 'الذكاء الاصطناعي',
+      name: 'هوش مصنوعی',
       icon: '🤖',
-      description: 'أحدث التطورات في مجال الذكاء الاصطناعي'
+      description: 'آخرین تحولات در زمینه هوش مصنوعی'
     },
     { 
       id: 'ml', 
-      name: 'التعلم الآلي',
+      name: 'یادگیری ماشین',
       icon: '🧠',
-      description: 'تقنيات وتطبيقات التعلم الآلي'
+      description: 'تکنیک‌ها و کاربردهای یادگیری ماشین'
     },
     { 
       id: 'nlp', 
-      name: 'معالجة اللغة',
+      name: 'پردازش زبان',
       icon: '💬',
-      description: 'تطورات معالجة اللغات الطبيعية'
+      description: 'تحولات پردازش زبان طبیعی'
     },
     { 
       id: 'data', 
-      name: 'تحليل البيانات',
+      name: 'تحلیل داده',
       icon: '📊',
-      description: 'تحليل وتفسير البيانات الضخمة'
+      description: 'تحلیل و تفسیر داده‌های بزرگ'
     }
   ];
   
@@ -76,105 +76,105 @@ const BlogPage = () => {
   const articles: Article[] = [
     {
       id: 1,
-      title: 'كيف يغير الذكاء الاصطناعي مستقبل الأعمال',
-      excerpt: 'استكشف كيف تستفيد الشركات من تقنيات الذكاء الاصطناعي لتحسين العمليات واتخاذ قرارات أفضل.',
+      title: 'چگونه هوش مصنوعی آینده کسب‌وکار را تغییر می‌دهد',
+      excerpt: 'کاوش کنید که چگونه شرکت‌ها از تکنیک‌های هوش مصنوعی برای بهبود عملیات و اتخاذ تصمیمات بهتر بهره می‌برند.',
       imageUrl: 'https://picsum.photos/seed/ai1/800/600',
       category: 'ai',
       author: {
-        name: 'أحمد الشمري',
+        name: 'احمد الشمری',
         avatar: 'https://i.pravatar.cc/150?u=ahmed',
-        role: 'خبير الذكاء الاصطناعي'
+        role: 'کارشناس هوش مصنوعی'
       },
-      date: '15 يونيو 2023',
-      readTime: '7 دقائق',
+      date: '15 ژوئن 2023',
+      readTime: '7 دقیقه',
       featured: true,
-      tags: ['ذكاء-اصطناعي', 'أعمال', 'تقنية'],
+      tags: ['هوش-مصنوعی', 'کسب‌وکار', 'فناوری'],
       likes: 245,
       comments: 28
     },
     {
       id: 2,
-      title: 'تقنيات التعلم العميق وتطبيقاتها في الرؤية الحاسوبية',
-      excerpt: 'تعرف على أحدث التقنيات في مجال التعلم العميق وكيفية تطبيقها في أنظمة الرؤية الحاسوبية.',
+      title: 'تکنیک‌های یادگیری عمیق و کاربردهای آن در بینایی کامپیوتری',
+      excerpt: 'با جدیدترین تکنیک‌ها در زمینه یادگیری عمیق و نحوه کاربرد آن‌ها در سیستم‌های بینایی کامپیوتری آشنا شوید.',
       imageUrl: 'https://picsum.photos/seed/ml2/800/600',
       category: 'ml',
       author: {
-        name: 'سارة العبدالله',
+        name: 'ساره العبدالله',
         avatar: 'https://i.pravatar.cc/150?u=sarah',
-        role: 'باحثة في التعلم الآلي'
+        role: 'پژوهشگر یادگیری ماشین'
       },
-      date: '22 مايو 2023',
-      readTime: '5 دقائق',
-      tags: ['تعلم-عميق', 'رؤية-حاسوبية', 'تقنية'],
+      date: '22 مه 2023',
+      readTime: '5 دقیقه',
+      tags: ['یادگیری-عمیق', 'بینایی-کامپیوتری', 'فناوری'],
       likes: 189,
       comments: 15
     },
     {
       id: 3,
-      title: 'معالجة اللغة العربية الطبيعية: التحديات والحلول',
-      excerpt: 'نظرة عميقة على التحديات الفريدة في معالجة اللغة العربية والتقنيات المبتكرة للتغلب عليها.',
+      title: 'پردازش زبان طبیعی عربی: چالش‌ها و راه‌حل‌ها',
+      excerpt: 'نگاهی عمیق به چالش‌های منحصربه‌فرد در پردازش زبان عربی و تکنیک‌های نوآورانه برای غلبه بر آن‌ها.',
       imageUrl: 'https://picsum.photos/seed/nlp3/800/600',
       category: 'nlp',
       author: {
-        name: 'محمد القحطاني',
+        name: 'محمد القحطانی',
         avatar: 'https://i.pravatar.cc/150?u=mohammed',
-        role: 'مهندس معالجة لغات طبيعية'
+        role: 'مهندس پردازش زبان طبیعی'
       },
-      date: '10 أبريل 2023',
-      readTime: '8 دقائق',
+      date: '10 آوریل 2023',
+      readTime: '8 دقیقه',
       featured: true,
-      tags: ['معالجة-لغات', 'لغة-عربية', 'ذكاء-اصطناعي'],
+      tags: ['پردازش-زبان', 'زبان-عربی', 'هوش-مصنوعی'],
       likes: 312,
       comments: 45
     },
     {
       id: 4,
-      title: 'تحليل البيانات الضخمة: استراتيجيات للشركات الصغيرة والمتوسطة',
-      excerpt: 'كيف يمكن للشركات الصغيرة والمتوسطة الاستفادة من تحليل البيانات الضخمة بميزانية محدودة.',
+      title: 'تحلیل داده‌های بزرگ: استراتژی‌هایی برای شرکت‌های کوچک و متوسط',
+      excerpt: 'چگونه شرکت‌های کوچک و متوسط می‌توانند با بودجه محدود از تحلیل داده‌های بزرگ بهره‌مند شوند.',
       imageUrl: 'https://picsum.photos/seed/data4/800/600',
       category: 'data',
       author: {
-        name: 'نورة الدوسري',
+        name: 'نوره الدوسری',
         avatar: 'https://i.pravatar.cc/150?u=noura',
-        role: 'محللة بيانات'
+        role: 'تحلیلگر داده'
       },
       date: '3 مارس 2023',
-      readTime: '6 دقائق',
-      tags: ['تحليل-بيانات', 'شركات', 'تقنية'],
+      readTime: '6 دقیقه',
+      tags: ['تحلیل-داده', 'شرکت‌ها', 'فناوری'],
       likes: 156,
       comments: 19
     },
     {
       id: 5,
-      title: 'التعلم المعزز: الجيل القادم من الذكاء الاصطناعي',
-      excerpt: 'استكشاف كيفية استخدام تقنيات التعلم المعزز لتطوير نماذج ذكاء اصطناعي أكثر تقدماً وقدرة على التكيف.',
+      title: 'یادگیری تقویتی: نسل بعدی هوش مصنوعی',
+      excerpt: 'کاوش در نحوه استفاده از تکنیک‌های یادگیری تقویتی برای توسعه مدل‌های هوش مصنوعی پیشرفته‌تر و سازگارتر.',
       imageUrl: 'https://picsum.photos/seed/ai5/800/600',
       category: 'ai',
       author: {
-        name: 'أحمد الشمري',
+        name: 'احمد الشمری',
         avatar: 'https://i.pravatar.cc/150?u=ahmed',
-        role: 'خبير الذكاء الاصطناعي'
+        role: 'کارشناس هوش مصنوعی'
       },
-      date: '19 فبراير 2023',
-      readTime: '9 دقائق',
-      tags: ['تعلم-معزز', 'ذكاء-اصطناعي', 'تقنية'],
+      date: '19 فوریه 2023',
+      readTime: '9 دقیقه',
+      tags: ['یادگیری-تقویتی', 'هوش-مصنوعی', 'فناوری'],
       likes: 278,
       comments: 32
     },
     {
       id: 6,
-      title: 'نظرة على مستقبل التفاعل بين الإنسان والآلة',
-      excerpt: 'كيف ستغير واجهات المستخدم الذكية طريقة تفاعلنا مع التكنولوجيا في المستقبل القريب.',
+      title: 'نگاهی به آینده تعامل انسان و ماشین',
+      excerpt: 'چگونه رابط‌های کاربری هوشمند نحوه تعامل ما با فناوری را در آینده نزدیک تغییر خواهند داد.',
       imageUrl: 'https://picsum.photos/seed/ml6/800/600',
       category: 'ml',
       author: {
-        name: 'سارة العبدالله',
+        name: 'ساره العبدالله',
         avatar: 'https://i.pravatar.cc/150?u=sarah',
-        role: 'باحثة في التعلم الآلي'
+        role: 'پژوهشگر یادگیری ماشین'
       },
-      date: '7 يناير 2023',
-      readTime: '5 دقائق',
-      tags: ['تفاعل-إنسان-آلة', 'واجهات-مستخدم', 'تقنية'],
+      date: '7 ژانویه 2023',
+      readTime: '5 دقیقه',
+      tags: ['تعامل-انسان-ماشین', 'رابط-کاربری', 'فناوری'],
       likes: 198,
       comments: 23
     }
@@ -275,11 +275,11 @@ const BlogPage = () => {
               transition={{ duration: 0.3 }}
             >
               <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
-                اشترك في <span className="gradient-text">النشرة البريدية</span>
+                در <span className="gradient-text">خبرنامه</span> مشترک شوید
               </h2>
               
               <p className="text-xl text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto">
-                احصل على أحدث المقالات والتحديثات والرؤى مباشرة في بريدك الإلكتروني. نرسل محتوى حصري لمشتركينا.
+                جدیدترین مقالات، به‌روزرسانی‌ها و بینش‌ها را مستقیماً در ایمیل خود دریافت کنید. ما محتوای اختصاصی برای مشترکین خود ارسال می‌کنیم.
               </p>
             </motion.div>
             
@@ -287,7 +287,7 @@ const BlogPage = () => {
               <div className="flex-grow relative">
                 <input
                   type="email"
-                  placeholder="بريدك الإلكتروني"
+                  placeholder="ایمیل شما"
                   className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all duration-300 text-lg"
                   required
                 />
@@ -306,7 +306,7 @@ const BlogPage = () => {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <span className="relative z-10">اشترك الآن</span>
+                <span className="relative z-10">اکنون مشترک شوید</span>
                 <motion.div 
                   className="absolute inset-0 bg-gradient-to-r from-primary via-primary-light to-accent"
                   animate={{
@@ -324,10 +324,10 @@ const BlogPage = () => {
             {/* Benefits */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-12">
               {[
-                { icon: '🚀', text: 'محتوى حصري' },
-                { icon: '⚡️', text: 'تحديثات فورية' },
-                { icon: '🎯', text: 'نصائح احترافية' },
-                { icon: '🔒', text: 'خصوصية تامة' }
+                { icon: '🚀', text: 'محتوای اختصاصی' },
+                { icon: '⚡️', text: 'به‌روزرسانی‌های فوری' },
+                { icon: '🎯', text: 'نکات حرفه‌ای' },
+                { icon: '🔒', text: 'حفظ کامل حریم خصوصی' }
               ].map((benefit, index) => (
                 <motion.div
                   key={benefit.text}
@@ -349,12 +349,13 @@ const BlogPage = () => {
   );
 
   return (
-    <Layout>
+    <>
       {/* Enhanced Hero Section */}
       <section className="min-h-[90vh] flex items-center justify-center pt-20 pb-16 relative overflow-hidden">
         {/* Enhanced Background Elements */}
         <div className="absolute inset-0 -z-10">
           {/* Primary Gradient Orb */}
+          {/*
           <motion.div 
             className="absolute top-1/4 right-1/3 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px]"
             animate={{
@@ -368,8 +369,10 @@ const BlogPage = () => {
               repeatType: "reverse"
             }}
           />
+          */}
           
           {/* Secondary Gradient Orb */}
+          {/*
           <motion.div 
             className="absolute -bottom-32 -left-32 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[100px]"
             animate={{
@@ -383,6 +386,7 @@ const BlogPage = () => {
               repeatType: "reverse"
             }}
           />
+          */}
           
           {/* Enhanced Grid Pattern */}
           <div 
@@ -397,6 +401,7 @@ const BlogPage = () => {
           />
 
           {/* Floating Particles */}
+          {/*
           {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
@@ -417,6 +422,7 @@ const BlogPage = () => {
               }}
             />
           ))}
+          */}
         </div>
         
         <div className="container relative">
@@ -429,20 +435,20 @@ const BlogPage = () => {
               transition={{ duration: 0.7 }}
             >
               <h1 className="text-6xl md:text-7xl font-display font-bold mb-8">
-                المدونة <span className="gradient-text">التقنية</span>
+                وبلاگ <span className="gradient-text">فناوری</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed">
-                استكشف أحدث المقالات والرؤى حول تقنيات الذكاء الاصطناعي وتحليل البيانات
+                جدیدترین مقالات و بینش‌ها را در مورد فناوری‌های هوش مصنوعی و تحلیل داده کاوش کنید
               </p>
             </motion.div>
 
             {/* Blog Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
               {[
-                { number: articles.length, label: 'مقال', icon: '📝' },
-                { number: categories.length - 1, label: 'فئة', icon: '🏷️' },
-                { number: articles.reduce((acc, curr) => acc + curr.likes, 0), label: 'إعجاب', icon: '❤️' },
-                { number: articles.reduce((acc, curr) => acc + curr.comments, 0), label: 'تعليق', icon: '💬' }
+                { number: articles.length, label: 'مقاله', icon: '📝' },
+                { number: categories.length - 1, label: 'دسته', icon: '🏷️' },
+                { number: articles.reduce((acc, curr) => acc + curr.likes, 0), label: 'لایک', icon: '❤️' },
+                { number: articles.reduce((acc, curr) => acc + curr.comments, 0), label: 'نظر', icon: '💬' }
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}
@@ -468,7 +474,7 @@ const BlogPage = () => {
               <div className={`relative transition-all duration-300 ${isSearchFocused ? 'scale-105' : ''}`}>
                 <input
                   type="text"
-                  placeholder="ابحث عن المقالات..."
+                  placeholder="مقالات را جستجو کنید..."
                   className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-full focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all duration-300 pr-14 text-lg"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -482,9 +488,9 @@ const BlogPage = () => {
                     }}
                     transition={{ duration: 0.2 }}
                   >
-                    <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
+                      <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
                   </motion.div>
                 </div>
               </div>
@@ -523,13 +529,13 @@ const BlogPage = () => {
             >
               <h2 className="text-3xl md:text-4xl font-display font-bold flex items-center gap-3">
                 <span className="text-2xl">✨</span>
-                مقالات <span className="gradient-text">مميزة</span>
+                مقالات <span className="gradient-text">ویژه</span>
               </h2>
               <Link 
                 to="/blog/featured" 
                 className="text-primary hover:text-primary-light transition-colors flex items-center gap-2 group"
               >
-                عرض المزيد
+                نمایش بیشتر
                 <motion.svg 
                   className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" 
                   fill="none" 
@@ -662,7 +668,7 @@ const BlogPage = () => {
                 <div className={`relative transition-all duration-300 ${isSearchFocused ? 'scale-[1.02]' : ''}`}>
                   <input
                     type="text"
-                    placeholder="بحث في المقالات..."
+                    placeholder="جستجو در مقالات..."
                     className="w-full px-6 py-4 bg-white/5 border border-white/10 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all duration-300 pr-14 text-lg"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -817,7 +823,7 @@ const BlogPage = () => {
                           className="w-10 h-10 rounded-full border-2 border-primary/20"
                         />
                         <div>
-                          <h4 className="font-medium text-white text-sm">{article.author.name}</h4>
+                          <h4 className="font-medium text-white">{article.author.name}</h4>
                           <p className="text-xs text-gray-400">{article.author.role}</p>
                         </div>
                       </div>
@@ -908,9 +914,9 @@ const BlogPage = () => {
         </div>
       </section>
       
-      <SubscribeSection />
-    </Layout>
+      {/* <SubscribeSection /> */}
+    </>
   );
 };
 
-export default BlogPage; 
+export default BlogPage;

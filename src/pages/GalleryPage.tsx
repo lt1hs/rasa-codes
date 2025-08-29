@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import Layout from '../components/layout/Layout';
+// import Layout from '../components/layout/Layout';
 import ParticleBackground from '../components/ui/ParticleBackground';
 import SectionWrapper from '../components/ui/SectionWrapper';
 
@@ -82,7 +82,7 @@ const GalleryPage = () => {
   );
 
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <section className="min-h-[70vh] flex items-center justify-center pt-20 pb-16 relative overflow-hidden">
         <ParticleBackground />
@@ -211,7 +211,7 @@ const GalleryPage = () => {
           </motion.a>
         </motion.div>
       </SectionWrapper>
-    </Layout>
+    </>
   );
 };
 

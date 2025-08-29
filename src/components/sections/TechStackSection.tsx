@@ -302,13 +302,13 @@ const TechStackSection = () => {
               whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             >
-              <h2 className="text-sm font-medium tracking-wider text-[#57DCDA] uppercase">التقنيات المستخدمة</h2>
+              <h2 className="text-sm font-medium tracking-wider text-[#57DCDA] uppercase">فناوری‌های مورد استفاده</h2>
             </motion.div>
             
             <h3 className="text-4xl md:text-5xl font-display font-bold mb-6">
-              <span className="text-white">بناء المستقبل</span>{" "}
+              <span className="text-white">ساختن آینده</span>{" "}
               <span className="bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent">
-                بتقنيات متطورة
+                با فناوری‌های پیشرفته
               </span>
             </h3>
             
@@ -319,8 +319,7 @@ const TechStackSection = () => {
               transition={{ duration: 0.5, delay: 0.3 }}
               viewport={{ once: true }}
             >
-              نستخدم أحدث التقنيات والأدوات لتقديم تجربة فريدة وحلول مبتكرة تلبي احتياجاتك البحثية
-            </motion.p>
+ما از جدیدترین فناوری‌ها و ابزارها برای ارائه یک تجربه منحصر به فرد و راه‌حل‌های نوآورانه که نیازهای تحقیقاتی شما را برآورده می‌کند، استفاده می‌کنیم.            </motion.p>
           </motion.div>
         </div>
 

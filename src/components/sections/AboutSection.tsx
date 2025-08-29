@@ -422,7 +422,7 @@ const AboutSection = () => {
               whileHover={{ scale: 1.02 }}
             >
               <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] bg-clip-text text-transparent">
-                إنجازاتنا
+               دستاوردهای ما
               </h3>
               <div className="space-y-4">
                 {achievements.map((achievement, index) => (

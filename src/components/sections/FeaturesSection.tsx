@@ -539,7 +539,7 @@ const FeaturesSection = () => {
               style={{ backgroundSize: '200% 100%' }}
             />
             
-            <span className="relative z-10">استكشف جميع الميزات</span>
+            
             
             <motion.svg
               xmlns="http://www.w3.org/2000/svg"

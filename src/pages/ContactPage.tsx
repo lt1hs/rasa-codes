@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
-import Layout from '../components/layout/Layout';
+// import Layout from '../components/layout/Layout';
 import ParticleBackground from '../components/ui/ParticleBackground';
 import SectionWrapper from '../components/ui/SectionWrapper';
 
@@ -35,7 +35,7 @@ const ContactPage = () => {
     email: '',
     company: '',
     message: '',
-    subject: 'استفسار عام',
+    subject: 'استعلام عمومی',
     phone: '',
     preferredContact: 'email'
   });
@@ -54,21 +54,21 @@ const ContactPage = () => {
     const errors: Partial<FormData> = {};
     
     if (!formData.name.trim()) {
-      errors.name = 'الاسم مطلوب';
+      errors.name = 'نام الزامی است';
     }
     
     if (!formData.email.trim()) {
-      errors.email = 'البريد الإلكتروني مطلوب';
+      errors.email = 'ایمیل الزامی است';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      errors.email = 'البريد الإلكتروني غير صالح';
+      errors.email = 'ایمیل نامعتبر است';
     }
     
     if (formData.preferredContact === 'phone' && !formData.phone?.trim()) {
-      errors.phone = 'رقم الهاتف مطلوب';
+      errors.phone = 'شماره تلفن الزامی است';
     }
     
     if (!formData.message.trim()) {
-      errors.message = 'الرسالة مطلوبة';
+      errors.message = 'پیام الزامی است';
     }
     
     setFormErrors(errors);
@@ -139,25 +139,25 @@ const ContactPage = () => {
   const contactInfo: ContactInfo[] = [
     {
       icon: 'location',
-      title: 'العنوان',
-      content: 'الرياض، المملكة العربية السعودية<br/>حي التخصصي، شارع التحلية'
+      title: 'آدرس',
+      content: 'ریاض، عربستان سعودی، محله التخصصی، خیابان التحلیه'
     },
     {
       icon: 'email',
-      title: 'البريد الإلكتروني',
+      title: 'ایمیل',
       content: 'info@techno-rasa.com<br/>support@techno-rasa.com',
       link: 'mailto:info@techno-rasa.com'
     },
     {
       icon: 'phone',
-      title: 'الهاتف',
+      title: 'تلفن',
       content: '+966 12 345 6789<br/>+966 12 345 6780',
       link: 'tel:+966123456789'
     },
     {
       icon: 'time',
-      title: 'ساعات العمل',
-      content: 'الأحد - الخميس: 9:00 ص - 5:00 م<br/>الجمعة - السبت: مغلق'
+      title: 'ساعات کاری',
+      content: 'یکشنبه - پنجشنبه: 9:00 صبح - 5:00 عصر<br/>جمعه - شنبه: تعطیل'
     }
   ];
 
@@ -186,7 +186,7 @@ const ContactPage = () => {
   ];
 
   return (
-    <Layout>
+    <>
       {/* Hero Section */}
       <section className="min-h-[70vh] flex items-center justify-center pt-20 pb-16 relative overflow-hidden">
         <ParticleBackground />
@@ -424,8 +424,8 @@ const ContactPage = () => {
           />
         </div>
       </SectionWrapper>
-    </Layout>
+    </>
   );
 };
 
-export default ContactPage; 
+export default ContactPage;

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
 import LoadingScreen from './components/ui/LoadingScreen';
+import ModeSwitcher from './components/ui/ModeSwitcher';
 import Layout from './components/layout/Layout';
 import HeroSection from './components/sections/HeroSection';
 import FeaturesSection from './components/sections/FeaturesSection';
@@ -24,62 +25,102 @@ import GalleryPage from './pages/GalleryPage';
 import ProjectsPage from './pages/ProjectsPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
+import LiteHomePage from './pages/LiteHomePage';
+import { PerformanceProvider } from './contexts/PerformanceContext';
+import { usePerformanceContext } from './contexts/PerformanceContext';
 import './index.css';
+import SignBoardPage from './pages/SignBoardPage';
 
-const App = () => {
+const AppContent = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const { isLiteVersion, supportsWebGL, supportsWebP, isSlowConnection } = usePerformanceContext();
 
   useEffect(() => {
+    // Add performance-related classes to body
+    document.body.classList.toggle('lite-version', isLiteVersion);
+    document.body.classList.toggle('no-webgl', !supportsWebGL);
+    document.body.classList.toggle('no-webp', !supportsWebP);
+    document.body.classList.toggle('slow-connection', isSlowConnection);
+
     // Simulate initial loading
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000);
+    }, isLiteVersion ? 1000 : 2000); // Shorter loading time for lite version
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => {
+      clearTimeout(timer);
+      document.body.classList.remove('lite-version', 'no-webgl', 'no-webp', 'slow-connection');
+    };
+  }, [isLiteVersion, supportsWebGL, supportsWebP, isSlowConnection]);
+
+  const HomeContent = isLiteVersion ? (
+    <LiteHomePage />
+  ) : (
+    <>
+      <HeroSection />
+      <FeaturesSection />
+      <RasaSmartCaseSection />
+      <RasaSignsSection />
+      <TechStackSection />
+      <AboutSection />
+      <ProjectsSection />
+      <GallerySection />
+      <BlogsSection />
+      <RasaAppSection />
+      {/* <CTASection /> */}
+    </>
+  );
 
   return (
     <Router>
       {isLoading ? (
-        <LoadingScreen />
+        <LoadingScreen isLite={isLiteVersion} />
       ) : (
         <>
-          <Header />
-          <Layout>
-            <Routes>
-              {/* Auth Routes */}
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
+          <Routes>
+            {/* Admin Routes - No Header/Footer */}
+            <Route path="/admin" element={<AdminDashboardPage />} />
 
-              {/* Main Routes */}
-              <Route path="/" element={
-                <>
-                  <HeroSection />
-                  <FeaturesSection />
-                  <RasaSmartCaseSection />
-                  <RasaSignsSection />
-                  <TechStackSection />
-                  <AboutSection />
-                  <ProjectsSection />
-                  <GallerySection />
-                  <BlogsSection />
-                  <RasaAppSection />
-                  {/* <CTASection /> */}
-                </>
-              } />
-              <Route path="/features" element={<FeaturesPage />} />
-              <Route path="/pricing" element={<PricingPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/blog" element={<BlogPage />} />
-              <Route path="/blog/:id" element={<BlogPostPage />} />
-              <Route path="/gallery" element={<GalleryPage />} />
-              <Route path="/projects" element={<ProjectsPage />} />
-            </Routes>
-          </Layout>
+            {/* Other Routes with Header/Footer */}
+            <Route path="/*" element={
+              <>
+                <Header />
+                <Layout>
+                  <Routes>
+                    {/* Auth Routes */}
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignUpPage />} />
+
+                    {/* Main Routes */}
+                    <Route path="/" element={HomeContent} />
+                    <Route path="/lite" element={<LiteHomePage />} />
+                    <Route path="/features" element={<FeaturesPage />} />
+                    <Route path="/pricing" element={<PricingPage />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/blog" element={<BlogPage />} />
+                    <Route path="/blog/:id" element={<BlogPostPage />} />
+                    <Route path="/gallery" element={<GalleryPage />} />
+                    <Route path="/projects" element={<ProjectsPage />} />
+                    <Route path="/signboard" element={<SignBoardPage />} />
+                  </Routes>
+                </Layout>
+                <ModeSwitcher />
+              </>
+            } />
+          </Routes>
         </>
       )}
     </Router>
+  );
+};
+
+const App = () => {
+  return (
+    <PerformanceProvider>
+      <AppContent />
+    </PerformanceProvider>
   );
 };
 
