@@ -39,32 +39,7 @@ authAPI.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle token refresh
-authAPI.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-    
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      
-      try {
-        const newToken = await refreshAccessToken();
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
-        return authAPI(originalRequest);
-      } catch (refreshError) {
-        // Redirect to login if refresh fails
-        logout();
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
-    }
-    
-    return Promise.reject(error);
-  }
-);
-
-// Token storage utilities
+// Token management
 export const getStoredToken = (): string | null => {
   return localStorage.getItem('admin_access_token');
 };
@@ -96,121 +71,91 @@ export const storeUser = (user: User): void => {
 // Authentication API methods
 export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   try {
-    // If Supabase is not configured, use mock authentication
-    if (!supabase || !API_BASE_URL) {
-      console.log('Using mock authentication');
+    // Use Supabase authentication if available
+    if (supabase) {
+      console.log('Using Supabase authentication');
       
-      // Simple validation for demo purposes
-      if (!credentials.email || !credentials.password) {
-        throw new Error('Email and password are required');
-      }
-      
-      // Mock successful login for any valid-looking credentials
-      const mockUser: User = {
-        id: '1',
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: credentials.email,
-        name: credentials.email.split('@')[0] || 'Admin User',
-        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
-        role: 'admin' as Role,
+        password: credentials.password
+      });
+
+      if (error) {
+        console.error('Supabase auth error:', error);
+        throw new Error(error.message || 'Authentication failed');
+      }
+
+      if (!data.user || !data.session) {
+        throw new Error('No user data returned from Supabase');
+      }
+
+      // Create user object from Supabase data
+      const user: User = {
+        id: data.user.id,
+        email: data.user.email!,
+        name: data.user.user_metadata?.name || data.user.email!.split('@')[0],
+        avatar: data.user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.user.email}`,
+        role: 'admin' as Role, // Default to admin for now
         permissions: ROLE_PERMISSIONS.admin,
         isActive: true,
         lastLogin: new Date(),
-        createdAt: new Date('2024-01-01'),
+        createdAt: new Date(data.user.created_at),
         updatedAt: new Date()
       };
 
-      const mockTokens = {
-        accessToken: 'mock_access_token_' + Date.now(),
-        refreshToken: 'mock_refresh_token_' + Date.now(),
-        expiresIn: 900 // 15 minutes
+      const tokens = {
+        accessToken: data.session.access_token,
+        refreshToken: data.session.refresh_token,
+        expiresIn: data.session.expires_in || 3600
       };
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-      return {
-        user: mockUser,
-        tokens: mockTokens
-      };
+      return { user, tokens };
     }
-
-    // Try Supabase authentication
-    const { data, error } = await supabase.auth.signInWithPassword({
+    
+    // Fallback to mock authentication if Supabase not configured
+    console.log('Supabase not configured, using mock authentication');
+    
+    // Simple validation for demo purposes
+    if (!credentials.email || !credentials.password) {
+      throw new Error('Email and password are required');
+    }
+    
+    // Mock successful login for any valid-looking credentials
+    const mockUser: User = {
+      id: '1',
       email: credentials.email,
-      password: credentials.password
-    });
-
-    if (error) {
-      console.error('Supabase auth error:', error);
-      throw new Error(error.message || 'Authentication failed');
-    }
-
-    if (!data.user || !data.session) {
-      throw new Error('No user data returned');
-    }
-
-    // Get or create user profile
-    let { data: userProfile, error: profileError } = await supabase
-      .from('users')
-      .select('*')
-      .eq('id', data.user.id)
-      .single();
-
-    if (profileError) {
-      // Create user profile if it doesn't exist
-      const { data: newProfile, error: insertError } = await supabase
-        .from('users')
-        .insert({
-          id: data.user.id,
-          email: data.user.email!,
-          name: data.user.user_metadata?.name || data.user.email!.split('@')[0],
-          role: 'admin'
-        })
-        .select()
-        .single();
-
-      if (insertError) {
-        console.error('Failed to create user profile:', insertError);
-      } else {
-        userProfile = newProfile;
-      }
-    }
-
-    const user: User = {
-      id: data.user.id,
-      email: data.user.email!,
-      name: userProfile?.name || data.user.email!.split('@')[0],
-      avatar: userProfile?.avatar_url,
-      role: (userProfile?.role as Role) || 'admin',
-      permissions: ROLE_PERMISSIONS[(userProfile?.role as Role) || 'admin'],
-      isActive: userProfile?.is_active ?? true,
+      name: credentials.email.split('@')[0] || 'Admin User',
+      avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
+      role: 'admin' as Role,
+      permissions: ROLE_PERMISSIONS.admin,
+      isActive: true,
       lastLogin: new Date(),
-      createdAt: new Date(data.user.created_at),
+      createdAt: new Date('2024-01-01'),
       updatedAt: new Date()
     };
 
-    const tokens = {
-      accessToken: data.session.access_token,
-      refreshToken: data.session.refresh_token,
-      expiresIn: data.session.expires_in
+    const mockTokens = {
+      accessToken: 'mock_access_token_' + Date.now(),
+      refreshToken: 'mock_refresh_token_' + Date.now(),
+      expiresIn: 900 // 15 minutes
     };
 
-    return { user, tokens };
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+
+    return {
+      user: mockUser,
+      tokens: mockTokens
+    };
   } catch (error: any) {
     console.error('Login error:', error);
     throw new Error(error.message || 'Login failed');
   }
 };
 
-export const refreshAccessToken = async (): Promise<string> => {
-  const refreshToken = getStoredRefreshToken();
-  
-  if (!refreshToken) {
-    throw new Error('No refresh token available');
-  }
-
+export const refreshToken = async (refreshToken: string): Promise<string> => {
   // For development, return mock refresh
-  if (import.meta.env.DEV) {
+  if (import.meta.env.DEV || !API_BASE_URL) {
     const newToken = 'mock_refreshed_token_' + Date.now();
     localStorage.setItem('admin_access_token', newToken);
     return newToken;
@@ -231,97 +176,71 @@ export const refreshAccessToken = async (): Promise<string> => {
 };
 
 export const logout = async (): Promise<void> => {
-  const refreshToken = getStoredRefreshToken();
-  
   try {
-    // Call logout endpoint to invalidate tokens on server
-    if (refreshToken && !import.meta.env.DEV && API_BASE_URL) {
-      await authAPI.post('/auth/logout', { refreshToken });
+    // Use Supabase logout if available
+    if (supabase) {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.warn('Supabase logout error:', error);
+      }
     }
   } catch (error) {
     console.warn('Logout API call failed:', error);
   } finally {
-    // Clear local storage regardless of API call success
+    // Always clear local storage regardless of API call success
     clearStoredTokens();
   }
 };
 
 export const getCurrentUser = async (): Promise<User> => {
-  // For development, return stored mock user
-  if (import.meta.env.DEV) {
-    const storedUser = getStoredUser();
-    if (storedUser) {
-      return storedUser;
+  // Use Supabase to get current user if available
+  if (supabase) {
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      
+      if (error) {
+        console.error('Supabase getUser error:', error);
+        throw new Error(error.message);
+      }
+      
+      if (!user) {
+        throw new Error('No authenticated user found');
+      }
+
+      // Return user object from Supabase data
+      return {
+        id: user.id,
+        email: user.email!,
+        name: user.user_metadata?.name || user.email!.split('@')[0],
+        avatar: user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`,
+        role: 'admin' as Role,
+        permissions: ROLE_PERMISSIONS.admin,
+        isActive: true,
+        lastLogin: new Date(),
+        createdAt: new Date(user.created_at),
+        updatedAt: new Date()
+      };
+    } catch (error) {
+      console.error('Failed to get current user from Supabase:', error);
+      throw error;
     }
-    throw new Error('No authenticated user found');
   }
 
-  // If no API configured, return stored user
-  if (!API_BASE_URL) {
-    const storedUser = getStoredUser();
-    if (storedUser) {
-      return storedUser;
-    }
-    throw new Error('No authenticated user found');
+  // Fallback to stored user for mock authentication
+  const storedUser = getStoredUser();
+  if (storedUser) {
+    return storedUser;
   }
-
-  try {
-    const response: AxiosResponse<User> = await authAPI.get('/auth/me');
-    return response.data;
-  } catch (error) {
-    clearStoredTokens();
-    throw new Error('Failed to get current user');
-  }
+  
+  throw new Error('No authenticated user found');
 };
 
-export const updateProfile = async (updates: Partial<User>): Promise<User> => {
-  // For development, return updated mock user
-  if (import.meta.env.DEV) {
-    const currentUser = getStoredUser();
-    if (!currentUser) {
-      throw new Error('No authenticated user found');
-    }
-    
-    const updatedUser = { ...currentUser, ...updates, updatedAt: new Date() };
-    storeUser(updatedUser);
-    return updatedUser;
-  }
-
-  try {
-    const response: AxiosResponse<User> = await authAPI.patch('/auth/profile', updates);
-    storeUser(response.data);
-    return response.data;
-  } catch (error) {
-    throw new Error('Failed to update profile');
-  }
+// Export service functions
+export const authService = {
+  login,
+  logout,
+  getCurrentUser,
+  refreshToken
 };
 
-export const changePassword = async (currentPassword: string, newPassword: string): Promise<void> => {
-  // For development, simulate successful password change
-  if (import.meta.env.DEV) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    return;
-  }
-
-  try {
-    await authAPI.patch('/auth/password', {
-      currentPassword,
-      newPassword
-    });
-  } catch (error) {
-    throw new Error('Failed to change password');
-  }
-};
-
-// Permission utilities
-export const hasPermission = (userPermissions: string[], requiredPermission: string): boolean => {
-  return userPermissions.includes(requiredPermission);
-};
-
-export const hasAnyPermission = (userPermissions: string[], requiredPermissions: string[]): boolean => {
-  return requiredPermissions.some(permission => userPermissions.includes(permission));
-};
-
-export const hasAllPermissions = (userPermissions: string[], requiredPermissions: string[]): boolean => {
-  return requiredPermissions.every(permission => userPermissions.includes(permission));
-};
+export default authService;
