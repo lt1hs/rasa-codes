@@ -41,6 +41,15 @@ const MediaLibrary: React.FC = () => {
     categories: 0
   });
 
+  // Helper function to validate and clean image URLs
+  const getValidImageUrl = (url: string, title: string) => {
+    // Check if URL is a blob URL or invalid
+    if (!url || url.startsWith('blob:') || url.includes('localhost')) {
+      return `https://via.placeholder.com/400x300/374151/9CA3AF?text=${encodeURIComponent(title || 'No Image')}`;
+    }
+    return url;
+  };
+
   useEffect(() => {
     loadMediaItems();
   }, []);
@@ -49,14 +58,22 @@ const MediaLibrary: React.FC = () => {
     try {
       setIsLoading(true);
       const items = await galleryService.getAll();
-      setMediaItems(items);
+      
+      // Clean up any items with invalid URLs (blob URLs, localhost, etc.)
+      const cleanedItems = items.map(item => ({
+        ...item,
+        image_url: getValidImageUrl(item.image_url, item.title),
+        thumbnail_url: item.thumbnail_url ? getValidImageUrl(item.thumbnail_url, item.title) : null
+      }));
+      
+      setMediaItems(cleanedItems);
       
       // Calculate stats
-      const categories = new Set(items.map(item => item.category).filter(Boolean));
+      const categories = new Set(cleanedItems.map(item => item.category).filter(Boolean));
       setStats({
-        total: items.length,
-        images: items.length, // All items are images in gallery
-        featured: items.filter(item => item.is_featured).length,
+        total: cleanedItems.length,
+        images: cleanedItems.length, // All items are images in gallery
+        featured: cleanedItems.filter(item => item.is_featured).length,
         categories: categories.size
       });
     } catch (error) {
@@ -130,14 +147,6 @@ const MediaLibrary: React.FC = () => {
     
     return matchesSearch && matchesTab;
   });
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
 
   if (isLoading) {
     return (
@@ -266,19 +275,12 @@ const MediaLibrary: React.FC = () => {
               >
                 <div className="relative aspect-video bg-gray-800">
                   <img
-                    src={item.thumbnail_url || item.image_url}
+                    src={getValidImageUrl(item.thumbnail_url || item.image_url, item.title)}
                     alt={item.alt_text || item.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = `data:image/svg+xml;base64,${btoa(`
-                        <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-                          <rect width="100%" height="100%" fill="#374151"/>
-                          <text x="50%" y="50%" font-family="Arial" font-size="14" fill="#9CA3AF" text-anchor="middle" dy=".3em">
-                            ${item.title || 'No Image'}
-                          </text>
-                        </svg>
-                      `)}`;
+                      target.src = `https://via.placeholder.com/400x300/374151/9CA3AF?text=${encodeURIComponent(item.title || 'No Image')}`;
                     }}
                   />
                   {item.is_featured && (
@@ -288,7 +290,10 @@ const MediaLibrary: React.FC = () => {
                   )}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     <button
-                      onClick={() => window.open(item.image_url, '_blank')}
+                      onClick={() => {
+                        const validUrl = getValidImageUrl(item.image_url, item.title);
+                        window.open(validUrl, '_blank');
+                      }}
                       className="p-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
                     >
                       <EyeIcon className="w-5 h-5 text-white" />
@@ -346,19 +351,12 @@ const MediaLibrary: React.FC = () => {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <img
-                            src={item.thumbnail_url || item.image_url}
+                            src={getValidImageUrl(item.thumbnail_url || item.image_url, item.title)}
                             alt={item.alt_text || item.title}
                             className="w-12 h-12 object-cover rounded-lg"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
-                              target.src = `data:image/svg+xml;base64,${btoa(`
-                                <svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
-                                  <rect width="100%" height="100%" fill="#374151"/>
-                                  <text x="50%" y="50%" font-family="Arial" font-size="10" fill="#9CA3AF" text-anchor="middle" dy=".3em">
-                                    No Image
-                                  </text>
-                                </svg>
-                              `)}`;
+                              target.src = `https://via.placeholder.com/48x48/374151/9CA3AF?text=${encodeURIComponent('No Image')}`;
                             }}
                           />
                           <div>
@@ -392,7 +390,10 @@ const MediaLibrary: React.FC = () => {
                       <td className="px-6 py-4">
                         <div className="flex gap-2">
                           <button
-                            onClick={() => window.open(item.image_url, '_blank')}
+                            onClick={() => {
+                              const validUrl = getValidImageUrl(item.image_url, item.title);
+                              window.open(validUrl, '_blank');
+                            }}
                             className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded text-xs hover:bg-blue-500/30"
                           >
                             <EyeIcon className="w-4 h-4" />
