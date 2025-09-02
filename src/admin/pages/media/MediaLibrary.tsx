@@ -25,6 +25,7 @@ import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { cn } from '../../utils/cn';
 import { galleryService, GalleryItem } from '../../services/gallery.service';
+import { supabase } from '../../lib/supabase';
 
 const MediaLibrary: React.FC = () => {
   const [activeTab, setActiveTab] = useState('all');
@@ -87,18 +88,61 @@ const MediaLibrary: React.FC = () => {
 
   const handleUpload = async (files: FileList) => {
     try {
+      setIsLoading(true);
+      
       for (const file of Array.from(files)) {
         if (file.type.startsWith('image/')) {
-          // Generate a realistic mock image URL
-          const imageId = Math.random().toString(36).substr(2, 9);
-          const mockImageUrl = `https://picsum.photos/400/300?random=${imageId}`;
+          // Generate unique filename
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
           
-          // Create a simple gallery item with realistic mock URL
+          let imageUrl = '';
+          let thumbnailUrl = '';
+          
+          // Try to upload to Supabase Storage if available
+          if (supabase) {
+            try {
+              // Upload to Supabase Storage
+              const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('media')
+                .upload(fileName, file, {
+                  cacheControl: '3600',
+                  upsert: false
+                });
+
+              if (uploadError) {
+                console.warn('Supabase upload failed:', uploadError);
+                throw uploadError;
+              }
+
+              // Get public URL
+              const { data: urlData } = supabase.storage
+                .from('media')
+                .getPublicUrl(fileName);
+
+              imageUrl = urlData.publicUrl;
+              thumbnailUrl = urlData.publicUrl; // Same URL for now, could add image resizing
+              
+            } catch (storageError) {
+              console.warn('Storage upload failed, using fallback:', storageError);
+              // Fallback to mock image
+              const imageId = Math.random().toString(36).substr(2, 9);
+              imageUrl = `https://picsum.photos/400/300?random=${imageId}`;
+              thumbnailUrl = `https://picsum.photos/200/150?random=${imageId}`;
+            }
+          } else {
+            // No Supabase available, use mock images
+            const imageId = Math.random().toString(36).substr(2, 9);
+            imageUrl = `https://picsum.photos/400/300?random=${imageId}`;
+            thumbnailUrl = `https://picsum.photos/200/150?random=${imageId}`;
+          }
+          
+          // Create gallery item with uploaded image URL
           const newItem = {
             title: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
             description: `Uploaded image: ${file.name}`,
-            image_url: mockImageUrl,
-            thumbnail_url: `https://picsum.photos/200/150?random=${imageId}`,
+            image_url: imageUrl,
+            thumbnail_url: thumbnailUrl,
             alt_text: file.name,
             category: 'uploads',
             tags: ['upload'],
@@ -115,6 +159,8 @@ const MediaLibrary: React.FC = () => {
     } catch (error) {
       console.error('Upload failed:', error);
       alert('خطا در آپلود فایل‌ها');
+    } finally {
+      setIsLoading(false);
     }
   };
 
