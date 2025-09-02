@@ -20,20 +20,28 @@ CREATE POLICY "Public read access" ON storage.objects
 FOR SELECT USING (bucket_id = 'media');
 ```
 
-### Allow Authenticated Upload
+### Allow Public Upload (for anonymous users)
 ```sql
-CREATE POLICY "Authenticated users can upload" ON storage.objects
-FOR INSERT WITH CHECK (bucket_id = 'media' AND auth.role() = 'authenticated');
+CREATE POLICY "Public upload access" ON storage.objects
+FOR INSERT WITH CHECK (bucket_id = 'media');
 ```
 
-### Allow Authenticated Update/Delete
+### Allow Public Update/Delete
 ```sql
-CREATE POLICY "Authenticated users can update" ON storage.objects
-FOR UPDATE USING (bucket_id = 'media' AND auth.role() = 'authenticated');
+CREATE POLICY "Public update access" ON storage.objects
+FOR UPDATE USING (bucket_id = 'media');
 
-CREATE POLICY "Authenticated users can delete" ON storage.objects
-FOR DELETE USING (bucket_id = 'media' AND auth.role() = 'authenticated');
+CREATE POLICY "Public delete access" ON storage.objects
+FOR DELETE USING (bucket_id = 'media');
 ```
+
+## Alternative: Disable RLS for Storage (Simpler)
+
+If you want to allow all operations without authentication:
+
+1. Go to **Storage > Settings**
+2. Find the `objects` table
+3. Click **Disable RLS** for the `storage.objects` table
 
 ## 3. Environment Variables
 
@@ -44,26 +52,34 @@ VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-## 4. How It Works
+## 4. Quick Fix SQL Commands
+
+Run these in your Supabase SQL Editor:
+
+```sql
+-- Drop existing restrictive policies
+DROP POLICY IF EXISTS "Authenticated users can upload" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can update" ON storage.objects;
+DROP POLICY IF EXISTS "Authenticated users can delete" ON storage.objects;
+
+-- Create public access policies
+CREATE POLICY "Public read access" ON storage.objects
+FOR SELECT USING (bucket_id = 'media');
+
+CREATE POLICY "Public upload access" ON storage.objects
+FOR INSERT WITH CHECK (bucket_id = 'media');
+
+CREATE POLICY "Public update access" ON storage.objects
+FOR UPDATE USING (bucket_id = 'media');
+
+CREATE POLICY "Public delete access" ON storage.objects
+FOR DELETE USING (bucket_id = 'media');
+```
+
+## 5. How It Works
 
 - **With Supabase configured**: Files upload to Supabase Storage, real URLs stored in database
 - **Without Supabase**: Falls back to mock images from Picsum
 - **Storage path**: Files stored as `media/timestamp-randomid.extension`
 - **Public URLs**: Automatically generated for uploaded files
-
-## 5. File Upload Flow
-
-1. User selects files
-2. Generate unique filename with timestamp
-3. Upload to Supabase Storage bucket 'media'
-4. Get public URL from Supabase
-5. Store URL in gallery database table
-6. Display uploaded image in media library
-
-## 6. Benefits
-
-- ✅ **Real file storage** - Actual user files stored securely
-- ✅ **CDN delivery** - Fast image loading via Supabase CDN
-- ✅ **Automatic scaling** - Supabase handles storage scaling
-- ✅ **Backup included** - Files backed up by Supabase
-- ✅ **Access control** - Policies control who can upload/delete
+- **No authentication required**: Anonymous users can upload files
