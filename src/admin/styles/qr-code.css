@@ -1,0 +1,287 @@
+/* QR Code Manager Styles */
+
+/* Custom slider styles */
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.slider:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF8301 0%, #57DCDA 100%);
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(255, 131, 1, 0.4);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF8301 0%, #57DCDA 100%);
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+}
+
+.slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(255, 131, 1, 0.4);
+}
+
+/* QR Code canvas container */
+.qr-canvas-container {
+  position: relative;
+  display: inline-block;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.qr-canvas-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(255, 131, 1, 0.2);
+}
+
+/* Template card animations */
+.template-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.template-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 131, 1, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.template-card:hover::before {
+  left: 100%;
+}
+
+.template-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(255, 131, 1, 0.15);
+}
+
+/* Color picker styles */
+input[type="color"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 6px;
+}
+
+input[type="color"]::-moz-color-swatch {
+  border: none;
+  border-radius: 6px;
+}
+
+/* Modal backdrop blur */
+.modal-backdrop {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Loading shimmer for QR codes */
+.qr-loading {
+  background: linear-gradient(90deg, 
+    rgba(16, 25, 43, 0.8) 25%, 
+    rgba(255, 131, 1, 0.1) 50%, 
+    rgba(16, 25, 43, 0.8) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Stats card glow effect */
+.stats-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(255, 131, 1, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stats-card:hover::after {
+  opacity: 1;
+}
+
+/* QR Code list item hover effects */
+.qr-list-item {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.qr-list-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(135deg, #FF8301 0%, #57DCDA 100%);
+  transform: scaleY(0);
+  transition: transform 0.2s ease;
+}
+
+.qr-list-item:hover::before,
+.qr-list-item.selected::before {
+  transform: scaleY(1);
+}
+
+/* Floating action button */
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF8301 0%, #57DCDA 100%);
+  box-shadow: 0 8px 24px rgba(255, 131, 1, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 12px 32px rgba(255, 131, 1, 0.6);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .qr-canvas-container {
+    max-width: 100%;
+  }
+  
+  .template-card {
+    margin-bottom: 12px;
+  }
+  
+  .fab {
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+  .qr-canvas-container {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+  
+  .qr-canvas-container:hover {
+    box-shadow: 0 12px 40px rgba(255, 131, 1, 0.3);
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .template-card,
+  .qr-canvas-container,
+  .slider,
+  .fab {
+    transition: none;
+  }
+  
+  .template-card::before {
+    display: none;
+  }
+  
+  @keyframes shimmer {
+    0%, 100% {
+      background-position: 0 0;
+    }
+  }
+}
+
+/* Focus styles for accessibility */
+.slider:focus,
+input[type="color"]:focus {
+  outline: 2px solid #FF8301;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .admin-card {
+    border: 2px solid #FF8301;
+  }
+  
+  .template-card {
+    border: 1px solid #FF8301;
+  }
+  
+  .qr-canvas-container {
+    border: 2px solid #FF8301;
+  }
+}

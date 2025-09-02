@@ -16,6 +16,27 @@ export type SignBoardConfig = {
   designStyle: string;
 };
 
+export interface StoreInfo {
+  storeName: string;
+  businessType: string;
+  description?: string;
+}
+
+export interface AIDesignRequest {
+  storeInfo: StoreInfo;
+  aiPrompt: string;
+  userId: string;
+}
+
+export interface GeneratedDesign {
+  id: string;
+  storeInfo: StoreInfo;
+  aiPrompt: string;
+  images: string[];
+  createdAt: string;
+  userId: string;
+}
+
 export type SignType = 
   | 'neon'
   | 'led'

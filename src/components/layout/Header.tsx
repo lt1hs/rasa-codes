@@ -38,7 +38,7 @@ const Header = () => {
     { name: 'درباره ما', href: '/about' },
     { name: 'ویژگی‌ها', href: '/features' },
     { name: 'پروژه‌ها', href: '/projects' },
-    { name: 'گالری', href: '/gallery' },
+    { name: 'فروشگاه', href: '/store' },    { name: 'گالری', href: '/gallery' },
     { name: 'وبلاگ', href: '/blog' },
     // { name: 'قیمت‌ها', href: '/pricing' },
     { name: 'تماس با ما', href: '/contact' }
@@ -99,77 +99,183 @@ const Header = () => {
           </Link>
         </motion.div>
 
-        {/* Enhanced Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-7">
+        {/* Ultra Professional Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-8">
           <motion.div
-            className="flex items-center bg-white/[0.03] backdrop-blur-2xl rounded-full px-1.5 py-1.5 border border-white/[0.08] shadow-lg shadow-black/5"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            whileHover={{ boxShadow: '0 0 30px rgba(99, 220, 255, 0.1)' }}
+            className="relative flex items-center bg-gradient-to-r from-white/[0.08] via-white/[0.05] to-white/[0.08] backdrop-blur-3xl rounded-2xl px-2 py-2 border border-white/[0.12] shadow-2xl shadow-black/10"
+            initial={{ opacity: 0, y: -15, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={{ 
+              boxShadow: '0 0 40px rgba(87, 220, 218, 0.15), 0 0 80px rgba(87, 220, 218, 0.05)',
+              borderColor: 'rgba(87, 220, 218, 0.2)'
+            }}
           >
+            {/* Animated Background Glow */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity duration-500"
+              style={{
+                background: 'linear-gradient(90deg, rgba(87,220,218,0.03), rgba(58,173,171,0.03), rgba(87,220,218,0.03))',
+              }}
+              animate={{
+                backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            />
+
             <motion.ul 
-              className="flex items-center"
+              className="flex items-center relative z-10"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, staggerChildren: 0.1, delayChildren: 0.2 }}
+              transition={{ duration: 0.6, staggerChildren: 0.08, delayChildren: 0.3 }}
             >
-              {navItems.map((item) => (
+              {navItems.map((item, index) => (
                 <motion.li 
                   key={item.name}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, y: -1 }}
                   whileTap={{ scale: 0.95 }}
                   className="relative"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                 >
                   <Link 
                     to={item.href} 
-                    className={`font-medium py-2 px-4 transition-all duration-300 relative rounded-full ${
+                    className={`relative font-medium py-3 px-5 transition-all duration-400 rounded-xl group overflow-hidden ${
                       activeItem === item.name 
-                        ? 'text-white bg-[#2FD6EA] shadow-sm shadow-[#2FD6EA]/10' 
-                        : 'text-white/80 hover:text-white hover:bg-white/[0.02]'
+                        ? 'text-white' 
+                        : 'text-white/75 hover:text-white'
                     }`}
                     onClick={() => setActiveItem(item.name)}
                   >
-                    {item.name}
+                    {/* Active Background with Gradient */}
                     {activeItem === item.name && (
                       <motion.div
-                        className="absolute inset-0 rounded-full bg-[#2FD6EA] opacity-30 blur-[2px] -z-10"
-                        layoutId="activeBackground"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        className="absolute inset-0 rounded-xl bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] shadow-lg shadow-[#57DCDA]/20"
+                        layoutId="activeNavBackground"
+                        transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
                       />
                     )}
+                    
+                    {/* Hover Background */}
+                    <motion.div
+                      className="absolute inset-0 rounded-xl bg-white/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      whileHover={{ scale: 1.02 }}
+                    />
+                    
+                    {/* Text with Glow Effect */}
+                    <span className={`relative z-10 transition-all duration-300 ${
+                      activeItem === item.name 
+                        ? 'drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]' 
+                        : 'group-hover:drop-shadow-[0_0_6px_rgba(87,220,218,0.4)]'
+                    }`}>
+                      {item.name}
+                    </span>
+                    
+                    {/* Animated Underline */}
+                    <motion.div
+                      className="absolute bottom-1 left-1/2 h-0.5 bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] rounded-full opacity-0 group-hover:opacity-100"
+                      initial={{ width: 0, x: '-50%' }}
+                      whileHover={{ width: '80%' }}
+                      transition={{ duration: 0.3 }}
+                    />
                   </Link>
                 </motion.li>
               ))}
             </motion.ul>
+
+            {/* Navigation Accent Dots */}
+            <div className="absolute -top-1 -right-1 w-2 h-2 bg-[#57DCDA] rounded-full opacity-60 animate-pulse" />
+            <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-[#3AADAB] rounded-full opacity-40 animate-pulse" style={{ animationDelay: '1s' }} />
           </motion.div>
           
-          {/* Enhanced Action Buttons */}
+          {/* Ultra Enhanced Action Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="flex gap-3"
+            className="flex items-center gap-4"
+            initial={{ opacity: 0, y: -15, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <Link 
-              to="/login" 
-              className="relative group px-6 py-2.5 overflow-hidden rounded-full border border-white/[0.08] transition-all duration-300 bg-white/[0.02]"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="relative z-10 text-white/90 group-hover:text-white transition-colors duration-300">
-                ورود
-              </span>
-            </Link>
-            
-            <Link 
-              to="/signup" 
-              className="relative group px-6 py-2.5 overflow-hidden rounded-full bg-[#2FD6EA] transition-all duration-300 shadow-sm shadow-[#2FD6EA]/10 hover:shadow-md hover:shadow-[#2FD6EA]/15"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="relative z-10 text-white font-medium">
-                شروع رایگان
-              </span>
-            </Link>
+            {/* Login Button */}
+            <motion.div className="relative group">
+              <Link to="/login">
+                <motion.button
+                  className="relative px-6 py-2.5 bg-white/[0.08] backdrop-blur-xl rounded-xl text-white/90 font-medium border border-white/[0.12] overflow-hidden group"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  {/* Animated Background */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-white/[0.1] to-white/[0.05] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  />
+                  
+                  {/* Shimmer Effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 opacity-0 group-hover:opacity-100"
+                    animate={{ x: ['-100%', '100%'] }}
+                    transition={{ duration: 0.8, ease: "easeInOut" }}
+                  />
+                  
+                  <span className="relative z-10">ورود</span>
+                </motion.button>
+              </Link>
+            </motion.div>
+
+            {/* CTA Button */}
+            <motion.div className="relative group">
+              <Link to="/contact">
+                <motion.button
+                  className="relative px-8 py-2.5 bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] rounded-xl text-white font-semibold overflow-hidden group shadow-lg shadow-[#57DCDA]/20"
+                  whileHover={{ 
+                    scale: 1.05, 
+                    y: -2,
+                    boxShadow: '0 10px 25px rgba(87,220,218,0.3), 0 0 30px rgba(87,220,218,0.2)'
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  {/* Animated Gradient Background */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-[#3AADAB] to-[#57DCDA] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  />
+                  
+                  {/* Pulse Effect */}
+                  <motion.div
+                    className="absolute inset-0 rounded-xl"
+                    animate={{
+                      boxShadow: [
+                        '0 0 0 0 rgba(87,220,218,0.4)',
+                        '0 0 0 8px rgba(87,220,218,0)',
+                      ],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeOut"
+                    }}
+                  />
+                  
+                  <span className="relative z-10 flex items-center gap-2">
+                    تماس با ما
+                    <motion.svg 
+                      className="w-4 h-4" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
+                      whileHover={{ x: 2 }}
+                      transition={{ type: "spring", stiffness: 400 }}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </motion.svg>
+                  </span>
+                </motion.button>
+              </Link>
+            </motion.div>
           </motion.div>
         </nav>
 

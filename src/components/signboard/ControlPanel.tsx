@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ControlPanelProps } from '../../types/signboard';
 import { 
   SIGN_TYPES, 
@@ -10,493 +11,408 @@ import {
   DESIGN_STYLE_SUGGESTIONS
 } from './constants';
 
-// Control card component for each section
-const ControlCard = ({ title, children }: { title: string; children: React.ReactNode }) => (
-  <div className="bg-white dark:bg-slate-800 rounded-lg shadow-md overflow-hidden">
-    <div className="bg-gray-50 dark:bg-slate-700 px-4 py-2 border-b border-gray-200 dark:border-slate-600">
-      <h3 className="font-medium text-gray-800 dark:text-white">{title}</h3>
+// Enhanced Control Card Component
+const ControlCard = ({ title, children, icon }: { title: string; children: React.ReactNode; icon?: string }) => (
+  <motion.div 
+    className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/[0.08] to-white/[0.02] backdrop-blur-sm border border-white/10"
+    whileHover={{ scale: 1.02, y: -2 }}
+    transition={{ duration: 0.2 }}
+  >
+    <div className="absolute inset-0 bg-gradient-to-br from-[#57DCDA]/5 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300" />
+    
+    <div className="relative p-6">
+      <div className="flex items-center gap-3 mb-4">
+        {icon && <span className="text-xl">{icon}</span>}
+        <h3 className="font-semibold text-white text-lg">{title}</h3>
+      </div>
+      <div className="space-y-4">{children}</div>
     </div>
-    <div className="p-4">{children}</div>
-  </div>
+  </motion.div>
 );
 
-// Form components
+// Enhanced Form Components
 const FormLabel = ({ htmlFor, children }: { htmlFor?: string; children: React.ReactNode }) => (
-  <label htmlFor={htmlFor} className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+  <label htmlFor={htmlFor} className="block text-sm font-medium text-gray-300 mb-2">
     {children}
   </label>
 );
 
 const FormInput = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, ...props }, ref) => (
-    <input
+    <motion.input
       ref={ref}
-      className={`w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm 
-      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-      bg-white dark:bg-slate-700 text-gray-900 dark:text-white ${className || ''}`}
+      className={`w-full px-4 py-3 bg-white/[0.05] backdrop-blur-sm border border-white/[0.12] rounded-xl text-white placeholder-gray-400 
+      focus:outline-none focus:ring-2 focus:ring-[#57DCDA]/50 focus:border-[#57DCDA]/50 transition-all duration-300 ${className || ''}`}
+      whileFocus={{ scale: 1.02 }}
       {...props}
     />
   )
 );
 
 const FormSelect = React.forwardRef<HTMLSelectElement, React.SelectHTMLAttributes<HTMLSelectElement>>(
-  ({ className, ...props }, ref) => (
-    <select
+  ({ className, children, ...props }, ref) => (
+    <motion.select
       ref={ref}
-      className={`w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-md shadow-sm 
-      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 
-      bg-white dark:bg-slate-700 text-gray-900 dark:text-white ${className || ''}`}
+      className={`w-full px-4 py-3 bg-white/[0.05] backdrop-blur-sm border border-white/[0.12] rounded-xl text-white 
+      focus:outline-none focus:ring-2 focus:ring-[#57DCDA]/50 focus:border-[#57DCDA]/50 transition-all duration-300 ${className || ''}`}
+      whileFocus={{ scale: 1.02 }}
       {...props}
-    />
+    >
+      {children}
+    </motion.select>
   )
 );
 
-export const ControlPanel: React.FC<ControlPanelProps> = ({
-  config,
-  onConfigChange,
-  onGeneratePreview,
-  onOrder,
-  isGenerating,
-  onUploadLogo
-}) => {
-  const [activeTab, setActiveTab] = useState<'details' | 'design' | 'dimensions'>('details');
-  const [logoFile, setLogoFile] = useState<File | null>(null);
+const ColorPicker = ({ value, onChange, colors }: { value: string; onChange: (color: string) => void; colors: string[] }) => (
+  <div className="grid grid-cols-6 gap-2">
+    {colors.map((color) => (
+      <motion.button
+        key={color}
+        className={`w-8 h-8 rounded-lg border-2 transition-all duration-200 ${
+          value === color ? 'border-white scale-110' : 'border-white/20'
+        }`}
+        style={{ backgroundColor: color }}
+        onClick={() => onChange(color)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      />
+    ))}
+  </div>
+);
 
-  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      setLogoFile(file);
-      onUploadLogo(file);
-    }
-  };
+const SliderInput = ({ label, value, onChange, min, max, step = 1 }: {
+  label: string;
+  value: number;
+  onChange: (value: number) => void;
+  min: number;
+  max: number;
+  step?: number;
+}) => (
+  <div>
+    <div className="flex justify-between items-center mb-2">
+      <FormLabel>{label}</FormLabel>
+      <span className="text-sm text-[#57DCDA] font-medium">{value}</span>
+    </div>
+    <div className="relative">
+      <input
+        type="range"
+        min={min}
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="w-full h-2 bg-white/[0.1] rounded-lg appearance-none cursor-pointer slider"
+      />
+      <style jsx>{`
+        .slider::-webkit-slider-thumb {
+          appearance: none;
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #57DCDA, #3AADAB);
+          cursor: pointer;
+          border: 2px solid white;
+          box-shadow: 0 2px 8px rgba(87, 220, 218, 0.3);
+        }
+        .slider::-moz-range-thumb {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #57DCDA, #3AADAB);
+          cursor: pointer;
+          border: 2px solid white;
+          box-shadow: 0 2px 8px rgba(87, 220, 218, 0.3);
+        }
+      `}</style>
+    </div>
+  </div>
+);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    
-    if (type === 'number') {
-      onConfigChange({ [name]: Number(value) });
-    } else {
-      onConfigChange({ [name]: value });
-    }
-  };
+const ControlPanel: React.FC<ControlPanelProps> = ({ config, onChange }) => {
+  const [activeTab, setActiveTab] = useState('basic');
 
-  const handleColorChange = (name: string, value: string) => {
-    onConfigChange({ [name]: value });
-  };
+  const tabs = [
+    { id: 'basic', label: 'اصلی', icon: '📝' },
+    { id: 'design', label: 'طراحی', icon: '🎨' },
+    { id: 'effects', label: 'جلوه‌ها', icon: '✨' },
+    { id: 'advanced', label: 'پیشرفته', icon: '⚙️' }
+  ];
 
   return (
-    <div className="w-full">
-      {/* Tabs */}
-      <div className="flex border-b border-gray-200 dark:border-slate-700 mb-4">
-        <button
-          className={`px-4 py-2 font-medium text-sm ${
-            activeTab === 'details'
-              ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400'
-              : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-          }`}
-          onClick={() => setActiveTab('details')}
-        >
-          Business Details
-        </button>
-        <button
-          className={`px-4 py-2 font-medium text-sm ${
-            activeTab === 'design'
-              ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400'
-              : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-          }`}
-          onClick={() => setActiveTab('design')}
-        >
-          Design
-        </button>
-        <button
-          className={`px-4 py-2 font-medium text-sm ${
-            activeTab === 'dimensions'
-              ? 'border-b-2 border-blue-500 text-blue-600 dark:text-blue-400'
-              : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'
-          }`}
-          onClick={() => setActiveTab('dimensions')}
-        >
-          Dimensions
-        </button>
+    <div className="space-y-6">
+      {/* Enhanced Tab Navigation */}
+      <div className="flex flex-wrap gap-2 p-2 bg-white/[0.03] backdrop-blur-sm rounded-2xl border border-white/[0.08]">
+        {tabs.map((tab) => (
+          <motion.button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all duration-300 ${
+              activeTab === tab.id
+                ? 'bg-gradient-to-r from-[#57DCDA] to-[#3AADAB] text-white shadow-lg'
+                : 'text-gray-400 hover:text-white hover:bg-white/[0.05]'
+            }`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span>{tab.icon}</span>
+            <span className="text-sm">{tab.label}</span>
+          </motion.button>
+        ))}
       </div>
 
       {/* Tab Content */}
-      <div className="space-y-4">
-        {activeTab === 'details' && (
-          <>
-            <ControlCard title="Business Information">
-              <div className="space-y-4">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.3 }}
+          className="space-y-6"
+        >
+          {activeTab === 'basic' && (
+            <>
+              <ControlCard title="محتوای تابلو" icon="📝">
                 <div>
-                  <FormLabel htmlFor="businessName">Business Name</FormLabel>
+                  <FormLabel htmlFor="text">متن اصلی</FormLabel>
                   <FormInput
-                    id="businessName"
-                    name="businessName"
-                    value={config.businessName}
-                    onChange={handleChange}
-                    placeholder="Enter your business name"
+                    id="text"
+                    type="text"
+                    value={config.text}
+                    onChange={(e) => onChange({ ...config, text: e.target.value })}
+                    placeholder="متن تابلو را وارد کنید..."
+                  />
+                </div>
+                
+                <div>
+                  <FormLabel htmlFor="subtitle">زیرنویس</FormLabel>
+                  <FormInput
+                    id="subtitle"
+                    type="text"
+                    value={config.subtitle || ''}
+                    onChange={(e) => onChange({ ...config, subtitle: e.target.value })}
+                    placeholder="زیرنویس (اختیاری)"
                   />
                 </div>
 
                 <div>
-                  <FormLabel htmlFor="businessType">Business Type</FormLabel>
-                  <div className="relative">
-                    <FormInput
-                      id="businessType"
-                      name="businessType"
-                      value={config.businessType}
-                      onChange={handleChange}
-                      placeholder="e.g., Restaurant, Retail Store, Salon"
-                      list="businessTypes"
-                    />
-                    <datalist id="businessTypes">
-                      {BUSINESS_TYPE_SUGGESTIONS.map((type) => (
-                        <option key={type} value={type} />
-                      ))}
-                    </datalist>
-                  </div>
-                </div>
-
-                <div>
-                  <FormLabel htmlFor="signText">Sign Text</FormLabel>
-                  <FormInput
-                    id="signText"
-                    name="signText"
-                    value={config.signText}
-                    onChange={handleChange}
-                    placeholder="Text to display on your sign"
-                  />
-                </div>
-
-                <div>
-                  <FormLabel htmlFor="logo">Logo (Optional)</FormLabel>
-                  <div className="flex items-center space-x-2">
-                    <label className="flex-1">
-                      <div className="px-4 py-2 bg-gray-100 dark:bg-slate-600 border border-gray-300 dark:border-slate-500 rounded-md text-center cursor-pointer hover:bg-gray-200 dark:hover:bg-slate-500 transition-colors">
-                        {logoFile ? logoFile.name : 'Choose file'}
-                      </div>
-                      <input
-                        type="file"
-                        id="logo"
-                        className="hidden"
-                        accept="image/*"
-                        onChange={handleLogoUpload}
-                      />
-                    </label>
-                    {logoFile && (
-                      <button
-                        className="text-red-500 hover:text-red-700"
-                        onClick={() => {
-                          setLogoFile(null);
-                          onConfigChange({ logo: null, logoUrl: undefined });
-                        }}
-                      >
-                        Remove
-                      </button>
-                    )}
-                  </div>
-                  {config.logoUrl && (
-                    <div className="mt-2">
-                      <img
-                        src={config.logoUrl}
-                        alt="Uploaded logo"
-                        className="h-16 object-contain"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </ControlCard>
-
-            <ControlCard title="Sign Type">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {SIGN_TYPES.map((type) => (
-                  <div
-                    key={type.value}
-                    className={`border rounded-md p-3 cursor-pointer transition-colors ${
-                      config.signType === type.value
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30'
-                        : 'border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
-                    }`}
-                    onClick={() => onConfigChange({ signType: type.value })}
+                  <FormLabel htmlFor="businessType">نوع کسب‌وکار</FormLabel>
+                  <FormSelect
+                    id="businessType"
+                    value={config.businessType || ''}
+                    onChange={(e) => onChange({ ...config, businessType: e.target.value })}
                   >
-                    <div className="font-medium text-gray-800 dark:text-white">{type.name}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{type.description}</div>
-                  </div>
-                ))}
-              </div>
-            </ControlCard>
-          </>
-        )}
+                    <option value="">انتخاب کنید...</option>
+                    {BUSINESS_TYPE_SUGGESTIONS.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </FormSelect>
+                </div>
+              </ControlCard>
 
-        {activeTab === 'design' && (
-          <>
-            <ControlCard title="Typography">
-              <div className="space-y-4">
+              <ControlCard title="ابعاد و نوع" icon="📏">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <FormLabel htmlFor="width">عرض (سانتی‌متر)</FormLabel>
+                    <FormInput
+                      id="width"
+                      type="number"
+                      value={config.width}
+                      onChange={(e) => onChange({ ...config, width: Number(e.target.value) })}
+                      min="10"
+                      max="500"
+                    />
+                  </div>
+                  <div>
+                    <FormLabel htmlFor="height">ارتفاع (سانتی‌متر)</FormLabel>
+                    <FormInput
+                      id="height"
+                      type="number"
+                      value={config.height}
+                      onChange={(e) => onChange({ ...config, height: Number(e.target.value) })}
+                      min="10"
+                      max="300"
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <FormLabel htmlFor="fontFamily">Font Family</FormLabel>
+                  <FormLabel htmlFor="signType">نوع تابلو</FormLabel>
+                  <FormSelect
+                    id="signType"
+                    value={config.signType}
+                    onChange={(e) => onChange({ ...config, signType: e.target.value as any })}
+                  >
+                    {SIGN_TYPES.map((type) => (
+                      <option key={type.value} value={type.value}>{type.label}</option>
+                    ))}
+                  </FormSelect>
+                </div>
+              </ControlCard>
+            </>
+          )}
+
+          {activeTab === 'design' && (
+            <>
+              <ControlCard title="فونت و متن" icon="🔤">
+                <div>
+                  <FormLabel htmlFor="fontFamily">فونت</FormLabel>
                   <FormSelect
                     id="fontFamily"
-                    name="fontFamily"
                     value={config.fontFamily}
-                    onChange={handleChange}
+                    onChange={(e) => onChange({ ...config, fontFamily: e.target.value })}
                   >
                     {FONT_FAMILIES.map((font) => (
-                      <option key={font.value} value={font.value}>
-                        {font.name}
-                      </option>
+                      <option key={font.value} value={font.value}>{font.label}</option>
                     ))}
                   </FormSelect>
                 </div>
 
+                <SliderInput
+                  label="اندازه فونت"
+                  value={config.fontSize}
+                  onChange={(value) => onChange({ ...config, fontSize: value })}
+                  min={12}
+                  max={72}
+                />
+
                 <div>
-                  <FormLabel htmlFor="fontWeight">Font Weight</FormLabel>
+                  <FormLabel htmlFor="fontWeight">ضخامت فونت</FormLabel>
                   <FormSelect
                     id="fontWeight"
-                    name="fontWeight"
                     value={config.fontWeight}
-                    onChange={handleChange}
+                    onChange={(e) => onChange({ ...config, fontWeight: e.target.value as any })}
                   >
                     {FONT_WEIGHTS.map((weight) => (
-                      <option key={weight.value} value={weight.value}>
-                        {weight.name}
-                      </option>
+                      <option key={weight.value} value={weight.value}>{weight.label}</option>
                     ))}
                   </FormSelect>
                 </div>
+              </ControlCard>
 
+              <ControlCard title="رنگ‌ها" icon="🎨">
                 <div>
-                  <div className="flex justify-between">
-                    <FormLabel htmlFor="fontSize">Font Size</FormLabel>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">{config.fontSize}px</span>
-                  </div>
-                  <input
-                    type="range"
-                    id="fontSize"
-                    name="fontSize"
-                    min="12"
-                    max="200"
-                    value={config.fontSize}
-                    onChange={handleChange}
-                    className="w-full h-2 bg-gray-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
+                  <FormLabel>رنگ متن</FormLabel>
+                  <ColorPicker
+                    value={config.textColor}
+                    onChange={(color) => onChange({ ...config, textColor: color })}
+                    colors={COLOR_PRESETS}
                   />
                 </div>
-              </div>
-            </ControlCard>
 
-            <ControlCard title="Colors">
-              <div className="space-y-4">
                 <div>
-                  <FormLabel htmlFor="textColor">Text Color</FormLabel>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="color"
-                      id="textColor"
-                      name="textColor"
-                      value={config.textColor}
-                      onChange={handleChange}
-                      className="w-10 h-10 rounded border border-gray-300 dark:border-slate-600 cursor-pointer"
-                    />
-                    <div className="flex-1">
-                      <FormInput
-                        type="text"
-                        value={config.textColor}
-                        onChange={handleChange}
-                        name="textColor"
-                        placeholder="#FFFFFF"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {COLOR_PRESETS.slice(0, 8).map((color) => (
-                      <button
-                        key={color.value}
-                        type="button"
-                        className="w-6 h-6 rounded-full border border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                        style={{ backgroundColor: color.value }}
-                        title={color.name}
-                        onClick={() => handleColorChange('textColor', color.value)}
-                      />
-                    ))}
-                  </div>
+                  <FormLabel>رنگ پس‌زمینه</FormLabel>
+                  <ColorPicker
+                    value={config.backgroundColor}
+                    onChange={(color) => onChange({ ...config, backgroundColor: color })}
+                    colors={COLOR_PRESETS}
+                  />
                 </div>
 
                 <div>
-                  <FormLabel htmlFor="backgroundColor">Background Color</FormLabel>
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="color"
-                      id="backgroundColor"
-                      name="backgroundColor"
-                      value={config.backgroundColor}
-                      onChange={handleChange}
-                      className="w-10 h-10 rounded border border-gray-300 dark:border-slate-600 cursor-pointer"
-                    />
-                    <div className="flex-1">
-                      <FormInput
-                        type="text"
-                        value={config.backgroundColor}
-                        onChange={handleChange}
-                        name="backgroundColor"
-                        placeholder="#000000"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    {COLOR_PRESETS.slice(0, 8).map((color) => (
-                      <button
-                        key={color.value}
-                        type="button"
-                        className="w-6 h-6 rounded-full border border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                        style={{ backgroundColor: color.value }}
-                        title={color.name}
-                        onClick={() => handleColorChange('backgroundColor', color.value)}
-                      />
-                    ))}
-                  </div>
+                  <FormLabel>رنگ حاشیه</FormLabel>
+                  <ColorPicker
+                    value={config.borderColor || '#000000'}
+                    onChange={(color) => onChange({ ...config, borderColor: color })}
+                    colors={COLOR_PRESETS}
+                  />
                 </div>
-              </div>
-            </ControlCard>
+              </ControlCard>
+            </>
+          )}
 
-            <ControlCard title="Effects">
-              <div className="space-y-4">
-                <div>
-                  <FormLabel htmlFor="effectType">Effect Type</FormLabel>
-                  <FormSelect
-                    id="effectType"
-                    name="effectType"
-                    value={config.effectType}
-                    onChange={handleChange}
-                  >
-                    {EFFECT_TYPES.map((effect) => (
-                      <option key={effect.value} value={effect.value}>
-                        {effect.name}
-                      </option>
-                    ))}
-                  </FormSelect>
-                </div>
-
-                <div>
-                  <FormLabel htmlFor="designStyle">Design Style</FormLabel>
-                  <div className="relative">
-                    <FormInput
-                      id="designStyle"
-                      name="designStyle"
-                      value={config.designStyle}
-                      onChange={handleChange}
-                      placeholder="e.g., Modern, Vintage, Bold"
-                      list="designStyles"
-                    />
-                    <datalist id="designStyles">
-                      {DESIGN_STYLE_SUGGESTIONS.map((style) => (
-                        <option key={style} value={style} />
-                      ))}
-                    </datalist>
-                  </div>
-                </div>
-              </div>
-            </ControlCard>
-          </>
-        )}
-
-        {activeTab === 'dimensions' && (
-          <ControlCard title="Size & Dimensions">
-            <div className="space-y-4">
+          {activeTab === 'effects' && (
+            <ControlCard title="جلوه‌های ویژه" icon="✨">
               <div>
-                <div className="flex justify-between">
-                  <FormLabel htmlFor="width">Width</FormLabel>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">{config.width} mm</span>
-                </div>
-                <input
-                  type="range"
-                  id="width"
-                  name="width"
-                  min="200"
-                  max="2000"
-                  step="10"
-                  value={config.width}
-                  onChange={handleChange}
-                  className="w-full h-2 bg-gray-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
-                />
+                <FormLabel htmlFor="effectType">نوع جلوه</FormLabel>
+                <FormSelect
+                  id="effectType"
+                  value={config.effectType || 'none'}
+                  onChange={(e) => onChange({ ...config, effectType: e.target.value as any })}
+                >
+                  {EFFECT_TYPES.map((effect) => (
+                    <option key={effect.value} value={effect.value}>{effect.label}</option>
+                  ))}
+                </FormSelect>
               </div>
 
+              <SliderInput
+                label="شدت جلوه"
+                value={config.effectIntensity || 50}
+                onChange={(value) => onChange({ ...config, effectIntensity: value })}
+                min={0}
+                max={100}
+              />
+
+              <SliderInput
+                label="ضخامت حاشیه"
+                value={config.borderWidth || 2}
+                onChange={(value) => onChange({ ...config, borderWidth: value })}
+                min={0}
+                max={10}
+              />
+
+              <SliderInput
+                label="شعاع گوشه‌ها"
+                value={config.borderRadius || 0}
+                onChange={(value) => onChange({ ...config, borderRadius: value })}
+                min={0}
+                max={50}
+              />
+            </ControlCard>
+          )}
+
+          {activeTab === 'advanced' && (
+            <ControlCard title="تنظیمات پیشرفته" icon="⚙️">
               <div>
-                <div className="flex justify-between">
-                  <FormLabel htmlFor="height">Height</FormLabel>
-                  <span className="text-sm text-gray-500 dark:text-gray-400">{config.height} mm</span>
-                </div>
+                <FormLabel htmlFor="designStyle">سبک طراحی</FormLabel>
+                <FormSelect
+                  id="designStyle"
+                  value={config.designStyle || ''}
+                  onChange={(e) => onChange({ ...config, designStyle: e.target.value })}
+                >
+                  <option value="">انتخاب کنید...</option>
+                  {DESIGN_STYLE_SUGGESTIONS.map((style) => (
+                    <option key={style} value={style}>{style}</option>
+                  ))}
+                </FormSelect>
+              </div>
+
+              <SliderInput
+                label="شفافیت پس‌زمینه"
+                value={config.backgroundOpacity || 100}
+                onChange={(value) => onChange({ ...config, backgroundOpacity: value })}
+                min={0}
+                max={100}
+              />
+
+              <div className="flex items-center gap-3">
                 <input
-                  type="range"
-                  id="height"
-                  name="height"
-                  min="100"
-                  max="1000"
-                  step="10"
-                  value={config.height}
-                  onChange={handleChange}
-                  className="w-full h-2 bg-gray-200 dark:bg-slate-600 rounded-lg appearance-none cursor-pointer"
+                  type="checkbox"
+                  id="hasLighting"
+                  checked={config.hasLighting || false}
+                  onChange={(e) => onChange({ ...config, hasLighting: e.target.checked })}
+                  className="w-5 h-5 text-[#57DCDA] bg-white/[0.05] border-white/[0.12] rounded focus:ring-[#57DCDA]/50"
                 />
+                <FormLabel htmlFor="hasLighting">نورپردازی LED</FormLabel>
               </div>
 
-              <div className="pt-2">
-                <div className="p-3 bg-gray-50 dark:bg-slate-700 rounded-md">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Aspect Ratio</span>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {(config.width / config.height).toFixed(2)}:1
-                    </span>
-                  </div>
-                </div>
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  id="isWeatherproof"
+                  checked={config.isWeatherproof || false}
+                  onChange={(e) => onChange({ ...config, isWeatherproof: e.target.checked })}
+                  className="w-5 h-5 text-[#57DCDA] bg-white/[0.05] border-white/[0.12] rounded focus:ring-[#57DCDA]/50"
+                />
+                <FormLabel htmlFor="isWeatherproof">ضد آب و هوا</FormLabel>
               </div>
-
-              <div className="grid grid-cols-3 gap-2 pt-2">
-                {/* Common size presets */}
-                <button
-                  type="button"
-                  className="px-3 py-2 bg-gray-100 dark:bg-slate-700 rounded-md text-sm hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
-                  onClick={() => onConfigChange({ width: 800, height: 400 })}
-                >
-                  800×400
-                </button>
-                <button
-                  type="button"
-                  className="px-3 py-2 bg-gray-100 dark:bg-slate-700 rounded-md text-sm hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
-                  onClick={() => onConfigChange({ width: 1000, height: 500 })}
-                >
-                  1000×500
-                </button>
-                <button
-                  type="button"
-                  className="px-3 py-2 bg-gray-100 dark:bg-slate-700 rounded-md text-sm hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors"
-                  onClick={() => onConfigChange({ width: 1200, height: 600 })}
-                >
-                  1200×600
-                </button>
-              </div>
-            </div>
-          </ControlCard>
-        )}
-
-        {/* Action buttons (always visible) */}
-        <div className="flex space-x-3 pt-4">
-          <button
-            type="button"
-            className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={onGeneratePreview}
-            disabled={isGenerating || !config.businessName || !config.signText}
-          >
-            {isGenerating ? 'Generating...' : 'Generate AI Preview'}
-          </button>
-          <button
-            type="button"
-            className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={onOrder}
-            disabled={!config.businessName || !config.signText}
-          >
-            Place Order
-          </button>
-        </div>
-      </div>
+            </ControlCard>
+          )}
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
-}; 
+};
+
+export { ControlPanel };

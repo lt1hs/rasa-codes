@@ -1,6 +1,6 @@
 import { SignConfig, SignType } from "../types";
 
-const API_TOKEN = process.env.HUGGINGFACE_API_TOKEN;
+const API_TOKEN = import.meta.env.VITE_HUGGINGFACE_API_TOKEN;
 const API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0";
 
 if (!API_TOKEN) {

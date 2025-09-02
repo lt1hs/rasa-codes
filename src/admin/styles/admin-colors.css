@@ -1,0 +1,323 @@
+/* Admin Color Overrides - Matching Home Page Theme */
+
+/* Override default component colors to match home page */
+.admin-theme {
+  /* Background colors */
+  --admin-bg-primary: #FF8301;
+  --admin-bg-secondary: #10192b;
+  --admin-bg-accent: #57DCDA;
+  --admin-bg-lime: #2dee59;
+  --admin-bg-purple: #9d4edd;
+  --admin-bg-orange: #ffaa00;
+  
+  /* Text colors */
+  --admin-text-light: #FFFFFF;
+  --admin-text-dark: #333;
+  --admin-text-primary: #FF8301;
+  --admin-text-accent: #57DCDA;
+  --admin-text-title: #E8F4FD;
+  --admin-text-subtitle: #B8E6FF;
+  --admin-text-heading: #FFE4CC;
+  
+  /* Border colors */
+  --admin-border-primary: #FF8301;
+  --admin-border-accent: #57DCDA;
+  
+  /* Gradient backgrounds */
+  --admin-gradient-primary: linear-gradient(135deg, #FF8301 0%, #57DCDA 100%);
+  --admin-gradient-dark: linear-gradient(135deg, #10192b 0%, #1a2540 100%);
+}
+
+/* Apply admin theme to all admin pages */
+.admin-layout {
+  background: var(--admin-gradient-dark);
+  color: var(--admin-text-light);
+}
+
+/* Card components */
+.admin-card {
+  background: rgba(16, 25, 43, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 131, 1, 0.2);
+  color: var(--admin-text-light);
+}
+
+.admin-card:hover {
+  border-color: rgba(255, 131, 1, 0.4);
+  box-shadow: 0 8px 32px rgba(255, 131, 1, 0.1);
+}
+
+/* Button overrides */
+.admin-btn-primary {
+  background: var(--admin-gradient-primary);
+  color: white;
+  border: none;
+}
+
+.admin-btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.admin-btn-secondary {
+  background: rgba(87, 220, 218, 0.1);
+  color: var(--admin-text-accent);
+  border: 1px solid var(--admin-border-accent);
+}
+
+.admin-btn-secondary:hover {
+  background: rgba(87, 220, 218, 0.2);
+}
+
+/* Input overrides */
+.admin-input {
+  background: rgba(16, 25, 43, 0.6);
+  border: 1px solid rgba(255, 131, 1, 0.2);
+  color: var(--admin-text-light);
+}
+
+.admin-input:focus {
+  border-color: var(--admin-border-primary);
+  box-shadow: 0 0 0 3px rgba(255, 131, 1, 0.1);
+}
+
+.admin-input::placeholder {
+  color: rgba(245, 245, 247, 0.5);
+}
+
+/* Table overrides */
+.admin-table {
+  background: rgba(16, 25, 43, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+.admin-table th {
+  background: rgba(255, 131, 1, 0.1);
+  color: var(--admin-text-light);
+  border-bottom: 1px solid rgba(255, 131, 1, 0.2);
+}
+
+.admin-table td {
+  color: var(--admin-text-light);
+  border-bottom: 1px solid rgba(255, 131, 1, 0.1);
+}
+
+.admin-table tr:hover {
+  background: rgba(255, 131, 1, 0.05);
+}
+
+/* Badge overrides */
+.admin-badge-primary {
+  background: var(--admin-bg-primary);
+  color: white;
+}
+
+.admin-badge-success {
+  background: var(--admin-bg-lime);
+  color: white;
+}
+
+.admin-badge-warning {
+  background: var(--admin-bg-orange);
+  color: white;
+}
+
+.admin-badge-info {
+  background: var(--admin-bg-accent);
+  color: white;
+}
+
+/* Progress bar overrides */
+.admin-progress {
+  background: rgba(16, 25, 43, 0.6);
+}
+
+.admin-progress-bar {
+  background: var(--admin-gradient-primary);
+}
+
+/* Modal overrides */
+.admin-modal {
+  background: rgba(16, 25, 43, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 131, 1, 0.2);
+  color: var(--admin-text-light);
+}
+
+.admin-modal-header {
+  border-bottom: 1px solid rgba(255, 131, 1, 0.2);
+}
+
+.admin-modal-footer {
+  border-top: 1px solid rgba(255, 131, 1, 0.2);
+}
+
+/* Dropdown overrides */
+.admin-dropdown {
+  background: rgba(16, 25, 43, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 131, 1, 0.2);
+  color: var(--admin-text-light);
+}
+
+.admin-dropdown-item:hover {
+  background: rgba(255, 131, 1, 0.1);
+}
+
+/* Chart overrides */
+.admin-chart-primary {
+  color: var(--admin-bg-primary);
+}
+
+.admin-chart-accent {
+  color: var(--admin-bg-accent);
+}
+
+.admin-chart-lime {
+  color: var(--admin-bg-lime);
+}
+
+/* Status indicators */
+.admin-status-online {
+  background: var(--admin-bg-lime);
+  box-shadow: 0 0 0 3px rgba(45, 238, 89, 0.3);
+}
+
+.admin-status-offline {
+  background: #6b7280;
+  box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.3);
+}
+
+.admin-status-busy {
+  background: var(--admin-bg-primary);
+  box-shadow: 0 0 0 3px rgba(255, 131, 1, 0.3);
+}
+
+/* Sidebar specific overrides */
+.admin-sidebar {
+  background: var(--admin-gradient-dark);
+  border-right: 1px solid rgba(255, 131, 1, 0.1);
+}
+
+.admin-sidebar-item {
+  color: rgba(245, 245, 247, 0.7);
+}
+
+.admin-sidebar-item:hover {
+  background: rgba(255, 131, 1, 0.1);
+  color: var(--admin-text-light);
+}
+
+.admin-sidebar-item.active {
+  background: var(--admin-gradient-primary);
+  color: white;
+}
+
+/* Header specific overrides */
+.admin-header {
+  background: rgba(16, 25, 43, 0.6);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 131, 1, 0.2);
+}
+
+/* Scrollbar overrides */
+.admin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-scrollbar::-webkit-scrollbar-track {
+  background: rgba(16, 25, 43, 0.3);
+}
+
+.admin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 131, 1, 0.5);
+  border-radius: 3px;
+}
+
+.admin-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 131, 1, 0.8);
+}
+
+/* Animation overrides */
+.admin-glow {
+  box-shadow: 0 0 20px rgba(255, 131, 1, 0.3);
+}
+
+.admin-glow:hover {
+  box-shadow: 0 0 30px rgba(255, 131, 1, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .admin-mobile-bg {
+    background: var(--admin-gradient-dark);
+  }
+}
+
+/* Enhanced Title Styling with Higher Specificity */
+.admin-title-primary,
+.admin-layout .admin-title-primary,
+h1.admin-title-primary {
+  color: var(--admin-text-title) !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  font-weight: 700 !important;
+}
+
+.admin-title-secondary,
+.admin-layout .admin-title-secondary,
+p.admin-title-secondary {
+  color: var(--admin-text-subtitle) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+  font-weight: 600 !important;
+}
+
+.admin-title-accent,
+.admin-layout .admin-title-accent,
+.admin-title-accent span {
+  background: linear-gradient(135deg, #FF8301 0%, #57DCDA 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  font-weight: 700 !important;
+  text-shadow: none !important;
+}
+
+.admin-heading,
+.admin-layout .admin-heading,
+.admin-heading span {
+  color: var(--admin-text-heading) !important;
+  text-shadow: 0 2px 8px rgba(255, 131, 1, 0.3) !important;
+  font-weight: 600 !important;
+}
+
+.admin-text-light,
+.admin-layout .admin-text-light {
+  color: var(--admin-text-light) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Card Title Overrides */
+.admin-layout .glass .admin-heading,
+.admin-layout .glass .admin-title-accent,
+.admin-layout .glass .admin-title-primary,
+.admin-layout .glass .admin-title-secondary {
+  color: inherit !important;
+}
+
+/* Ensure CardTitle components use the correct colors */
+[class*="CardTitle"] .admin-heading,
+[class*="CardTitle"] .admin-title-accent {
+  color: inherit !important;
+}
+
+/* Dark theme consistency */
+@media (prefers-color-scheme: dark) {
+  .admin-auto-dark {
+    background: var(--admin-bg-secondary);
+    color: var(--admin-text-light);
+  }
+  
+  .admin-auto-dark-border {
+    border-color: rgba(255, 131, 1, 0.2);
+  }
+}

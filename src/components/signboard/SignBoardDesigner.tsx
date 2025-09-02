@@ -104,9 +104,9 @@ export const SignBoardDesigner: React.FC<SignBoardDesignerProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Preview Panel - Takes up more space */}
-        <div className="lg:col-span-8">
+      <div className="space-y-8">
+        {/* Preview Panel - Full width on top */}
+        <div>
           <PreviewPanel
             config={config}
             generatedImage={generatedImage}
@@ -115,8 +115,8 @@ export const SignBoardDesigner: React.FC<SignBoardDesignerProps> = ({
           />
         </div>
         
-        {/* Control Panel - Takes up less space */}
-        <div className="lg:col-span-4">
+        {/* Control Panel - Full width below preview */}
+        <div>
           <ControlPanel
             config={config}
             onConfigChange={handleConfigChange}
