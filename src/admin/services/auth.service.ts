@@ -90,10 +90,40 @@ export const storeUser = (user: User): void => {
 // Authentication API methods
 export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   try {
+    // If Supabase is not configured, use mock authentication
     if (!supabase) {
-      throw new Error('Supabase not configured');
+      console.log('Supabase not configured, using mock authentication');
+      
+      // Mock successful login for any credentials
+      const mockUser: User = {
+        id: '1',
+        email: credentials.email,
+        name: 'Admin User',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
+        role: 'admin' as Role,
+        permissions: ROLE_PERMISSIONS.admin,
+        isActive: true,
+        lastLogin: new Date(),
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date()
+      };
+
+      const mockTokens = {
+        accessToken: 'mock_access_token_' + Date.now(),
+        refreshToken: 'mock_refresh_token_' + Date.now(),
+        expiresIn: 900 // 15 minutes
+      };
+
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      return {
+        user: mockUser,
+        tokens: mockTokens
+      };
     }
 
+    // Try Supabase authentication
     const { data, error } = await supabase.auth.signInWithPassword({
       email: credentials.email,
       password: credentials.password
