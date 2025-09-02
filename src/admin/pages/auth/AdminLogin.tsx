@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Form, Input, Button, Checkbox, message, Typography } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { UserOutlined, LockOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
-
-const { Title, Text } = Typography;
 
 interface LoginFormData {
   email: string;
   password: string;
-  remember?: boolean;
 }
 
 const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
-  const { login, isAuthenticated, isLoading } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const [form] = Form.useForm();
   const [submitLoading, setSubmitLoading] = useState(false);
 
@@ -32,7 +29,7 @@ const AdminLogin: React.FC = () => {
     
     try {
       await login({ email: values.email, password: values.password });
-      message.success('ورود موفقیت‌آمیز بود!');
+      message.success('ورود موفقیتآمیز بود!');
       navigate('/admin/dashboard');
     } catch (error) {
       message.error('نام کاربری یا رمز عبور اشتباه است');
@@ -44,44 +41,69 @@ const AdminLogin: React.FC = () => {
   // Fill demo credentials
   const fillDemoCredentials = () => {
     form.setFieldsValue({
-      email: 'admin@example.com',
+      email: 'admin@rasatech.com',
       password: 'admin123'
     });
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        <div className="absolute inset-0 opacity-20" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FF8301' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
+        
+        {/* Floating Orbs */}
+        <motion.div
+          className="absolute top-20 left-20 w-72 h-72 bg-orange-500/20 rounded-full blur-3xl"
+          animate={{
+            x: [0, 100, 0],
+            y: [0, -50, 0],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl"
+          animate={{
+            x: [0, -80, 0],
+            y: [0, 60, 0],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+      </div>
+
+      {/* Login Card */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-md"
+        className="relative z-10 w-full max-w-md mx-4"
       >
-        {/* Logo/Brand Section */}
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg">
-            <UserOutlined className="text-2xl text-white" />
+        <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-white/20">
+          {/* Logo and Title */}
+          <div className="text-center mb-8">
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="w-20 h-20 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"
+            >
+              <span className="text-2xl font-bold text-white">R</span>
+            </motion.div>
+            <h1 className="text-2xl font-bold text-white mb-2">پنل مدیریت</h1>
+            <p className="text-gray-300">به سیستم مدیریت راسا خوش آمدید</p>
           </div>
-          <Title level={2} className="text-gray-800 mb-2">
-            پنل مدیریت
-          </Title>
-          <Text className="text-gray-600">
-            وارد حساب کاربری خود شوید
-          </Text>
-        </motion.div>
 
-        {/* Login Form */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-          className="bg-white rounded-2xl shadow-xl p-8"
-        >
+          {/* Login Form */}
           <Form
             form={form}
             name="admin-login"
@@ -92,7 +114,6 @@ const AdminLogin: React.FC = () => {
           >
             <Form.Item
               name="email"
-              label="ایمیل"
               rules={[
                 { required: true, message: 'لطفا ایمیل خود را وارد کنید' },
                 { type: 'email', message: 'فرمت ایمیل صحیح نیست' }
@@ -100,82 +121,90 @@ const AdminLogin: React.FC = () => {
             >
               <Input
                 prefix={<UserOutlined className="text-gray-400" />}
-                placeholder="admin@example.com"
-                className="rounded-lg"
+                placeholder="ایمیل"
+                className="bg-white/10 border-white/20 text-white placeholder-gray-400 rounded-xl h-12 hover:border-orange-500 focus:border-orange-500"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  borderColor: 'rgba(255, 255, 255, 0.2)',
+                  color: 'white'
+                }}
               />
             </Form.Item>
 
             <Form.Item
               name="password"
-              label="رمز عبور"
-              rules={[
-                { required: true, message: 'لطفا رمز عبور خود را وارد کنید' },
-                { min: 6, message: 'رمز عبور باید حداقل 6 کاراکتر باشد' }
-              ]}
+              rules={[{ required: true, message: 'لطفا رمز عبور خود را وارد کنید' }]}
             >
               <Input.Password
                 prefix={<LockOutlined className="text-gray-400" />}
                 placeholder="رمز عبور"
-                className="rounded-lg"
                 iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                className="bg-white/10 border-white/20 text-white placeholder-gray-400 rounded-xl h-12 hover:border-orange-500 focus:border-orange-500"
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  borderColor: 'rgba(255, 255, 255, 0.2)',
+                  color: 'white'
+                }}
               />
             </Form.Item>
 
-            <Form.Item>
-              <div className="flex items-center justify-between">
-                <Form.Item name="remember" valuePropName="checked" noStyle>
-                  <Checkbox>مرا به خاطر بسپار</Checkbox>
-                </Form.Item>
-                <Button type="link" className="p-0 text-blue-600 hover:text-blue-800">
-                  فراموشی رمز عبور؟
-                </Button>
-              </div>
-            </Form.Item>
-
-            <Form.Item className="mb-0">
+            <Form.Item className="mb-6">
               <Button
                 type="primary"
                 htmlType="submit"
-                loading={submitLoading || isLoading}
-                className="w-full h-12 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 border-none hover:from-blue-700 hover:to-purple-700 text-lg font-medium"
+                loading={submitLoading}
+                className="w-full h-12 bg-gradient-to-r from-orange-500 to-orange-600 border-none rounded-xl font-semibold text-white shadow-lg hover:from-orange-600 hover:to-orange-700 transition-all duration-300"
+                style={{
+                  background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)',
+                  border: 'none'
+                }}
               >
-                ورود به پنل
+                {submitLoading ? 'در حال ورود...' : 'ورود به پنل'}
               </Button>
             </Form.Item>
           </Form>
 
           {/* Demo Credentials */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
-            className="mt-6 p-4 bg-gray-50 rounded-lg"
-          >
-            <Text className="text-gray-600 text-sm block mb-2">
-              برای تست سیستم:
-            </Text>
-            <Button
-              type="dashed"
+          <div className="text-center">
+            <button
               onClick={fillDemoCredentials}
-              className="w-full rounded-lg"
+              className="text-sm text-gray-300 hover:text-orange-400 transition-colors duration-200 underline"
             >
               استفاده از اطلاعات نمونه
-            </Button>
-          </motion.div>
-        </motion.div>
+            </button>
+          </div>
 
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.5 }}
-          className="text-center mt-8"
-        >
-          <Text className="text-gray-500 text-sm">
-            ساخته شده با React، TypeScript و Ant Design
-          </Text>
-        </motion.div>
+          {/* Footer */}
+          <div className="text-center mt-8 pt-6 border-t border-white/10">
+            <p className="text-xs text-gray-400">
+              © 2025 Rasa Technology. تمامی حقوق محفوظ است.
+            </p>
+          </div>
+        </div>
       </motion.div>
+
+      {/* Particles Effect */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-orange-400/30 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -100, 0],
+              opacity: [0, 1, 0],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 2,
+              repeat: Infinity,
+              delay: Math.random() * 2,
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 };
