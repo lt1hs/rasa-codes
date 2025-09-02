@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { Result, Spin } from 'antd';
 import { LockOutlined } from '@ant-design/icons';
 import { useAuth } from '../../hooks/useAuth';
-import { Permission } from '../types/auth.types';
+import { Permission } from '../../types/auth.types';
 
 interface ProtectedRouteProps {
   children: ReactElement;
@@ -20,7 +20,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   permissions = [],
   requireAll = false,
   fallback,
-  redirectTo = '/login'
+  redirectTo = '/admin/login' // Fixed: redirect to admin login instead of user login
 }) => {
   const { 
     isAuthenticated, 
@@ -40,7 +40,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  // Redirect to login if not authenticated
+  // Redirect to admin login if not authenticated
   if (!isAuthenticated || !user) {
     return <Navigate to={redirectTo} replace />;
   }
