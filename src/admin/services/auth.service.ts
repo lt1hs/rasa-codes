@@ -97,14 +97,19 @@ export const storeUser = (user: User): void => {
 export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   try {
     // If Supabase is not configured, use mock authentication
-    if (!supabase) {
-      console.log('Supabase not configured, using mock authentication');
+    if (!supabase || !API_BASE_URL) {
+      console.log('Using mock authentication');
       
-      // Mock successful login for any credentials
+      // Simple validation for demo purposes
+      if (!credentials.email || !credentials.password) {
+        throw new Error('Email and password are required');
+      }
+      
+      // Mock successful login for any valid-looking credentials
       const mockUser: User = {
         id: '1',
         email: credentials.email,
-        name: 'Admin User',
+        name: credentials.email.split('@')[0] || 'Admin User',
         avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin',
         role: 'admin' as Role,
         permissions: ROLE_PERMISSIONS.admin,
@@ -121,7 +126,7 @@ export const login = async (credentials: LoginCredentials): Promise<LoginRespons
       };
 
       // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 800));
 
       return {
         user: mockUser,

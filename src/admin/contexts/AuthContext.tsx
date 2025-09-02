@@ -123,18 +123,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     
     try {
       const token = getStoredToken();
+      console.log('Checking auth, token exists:', !!token);
+      
       if (!token) {
+        console.log('No token found, user not authenticated');
         dispatch({ type: 'AUTH_ERROR', payload: 'No access token found' });
         return;
       }
 
       // Try to get stored user first (faster UX)
       const storedUser = getStoredUser();
+      console.log('Stored user found:', !!storedUser);
+      
       if (storedUser) {
+        console.log('Using stored user:', storedUser.email);
         dispatch({ type: 'AUTH_SUCCESS', payload: { user: storedUser } });
         
         // Validate with server in background (for production)
-        if (!import.meta.env.DEV) {
+        if (!import.meta.env.DEV && API_BASE_URL) {
           try {
             const currentUser = await getCurrentUser();
             if (currentUser.id !== storedUser.id) {
@@ -142,11 +148,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               dispatch({ type: 'AUTH_UPDATE_USER', payload: currentUser });
             }
           } catch (error) {
+            console.warn('Background auth validation failed:', error);
             // Token might be expired, logout
             await logout();
           }
         }
       } else {
+        console.log('No stored user, attempting to fetch from server');
         // No stored user, fetch from server
         const currentUser = await getCurrentUser();
         storeUser(currentUser);
@@ -164,7 +172,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       dispatch({ type: 'AUTH_LOADING', payload: true });
       
+      console.log('Attempting login with:', { email: credentials.email });
+      
       const { user, tokens } = await loginService(credentials);
+      
+      console.log('Login successful, user:', user);
       
       // Store tokens and user data
       storeTokens(tokens.accessToken, tokens.refreshToken);
@@ -174,10 +186,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       
       message.success(`Welcome back, ${user.name}!`);
     } catch (error) {
+      console.error('Login failed:', error);
       const errorMessage = error instanceof Error ? error.message : 'Login failed';
       dispatch({ type: 'AUTH_ERROR', payload: errorMessage });
       message.error(errorMessage);
       throw error;
+    } finally {
+      dispatch({ type: 'AUTH_LOADING', payload: false });
     }
   };
 
