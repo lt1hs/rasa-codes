@@ -72,11 +72,11 @@ const MediaLibrary: React.FC = () => {
     try {
       for (const file of Array.from(files)) {
         if (file.type.startsWith('image/')) {
-          // Create a simple gallery item
+          // Create a simple gallery item without blob URL
           const newItem = {
             title: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
             description: `Uploaded image: ${file.name}`,
-            image_url: URL.createObjectURL(file), // Temporary URL for preview
+            image_url: `https://via.placeholder.com/400x300?text=${encodeURIComponent(file.name)}`, // Placeholder until real upload
             alt_text: file.name,
             category: 'uploads',
             tags: ['upload'],
@@ -270,7 +270,15 @@ const MediaLibrary: React.FC = () => {
                     alt={item.alt_text || item.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+                      const target = e.target as HTMLImageElement;
+                      target.src = `data:image/svg+xml;base64,${btoa(`
+                        <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+                          <rect width="100%" height="100%" fill="#374151"/>
+                          <text x="50%" y="50%" font-family="Arial" font-size="14" fill="#9CA3AF" text-anchor="middle" dy=".3em">
+                            ${item.title || 'No Image'}
+                          </text>
+                        </svg>
+                      `)}`;
                     }}
                   />
                   {item.is_featured && (
@@ -342,7 +350,15 @@ const MediaLibrary: React.FC = () => {
                             alt={item.alt_text || item.title}
                             className="w-12 h-12 object-cover rounded-lg"
                             onError={(e) => {
-                              (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iIzMzMyIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5ObyBJbWFnZTwvdGV4dD48L3N2Zz4=';
+                              const target = e.target as HTMLImageElement;
+                              target.src = `data:image/svg+xml;base64,${btoa(`
+                                <svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+                                  <rect width="100%" height="100%" fill="#374151"/>
+                                  <text x="50%" y="50%" font-family="Arial" font-size="10" fill="#9CA3AF" text-anchor="middle" dy=".3em">
+                                    No Image
+                                  </text>
+                                </svg>
+                              `)}`;
                             }}
                           />
                           <div>
