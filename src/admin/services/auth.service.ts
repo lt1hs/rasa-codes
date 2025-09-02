@@ -9,29 +9,31 @@ import {
 } from '../types/auth.types';
 import { supabase } from '../lib/supabase';
 
-// Mock API base URL - replace with actual API endpoint
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+// Mock API base URL - disable API calls in production if no URL provided
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || null;
 
 // Axios instance with interceptors
-const authAPI = axios.create({
+const authAPI = API_BASE_URL ? axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },
-});
+}) : null;
 
 // Request interceptor to add auth token
-authAPI.interceptors.request.use(
-  (config) => {
-    const token = getStoredToken();
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+if (authAPI) {
+  authAPI.interceptors.request.use(
+    (config) => {
+      const token = getStoredToken();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+      return config;
+    },
+    (error) => Promise.reject(error)
+  );
+}
 
 // Response interceptor to handle token refresh
 authAPI.interceptors.response.use(
@@ -224,7 +226,7 @@ export const logout = async (): Promise<void> => {
   
   try {
     // Call logout endpoint to invalidate tokens on server
-    if (refreshToken && !import.meta.env.DEV) {
+    if (refreshToken && !import.meta.env.DEV && authAPI) {
       await authAPI.post('/auth/logout', { refreshToken });
     }
   } catch (error) {
@@ -238,6 +240,15 @@ export const logout = async (): Promise<void> => {
 export const getCurrentUser = async (): Promise<User> => {
   // For development, return stored mock user
   if (import.meta.env.DEV) {
+    const storedUser = getStoredUser();
+    if (storedUser) {
+      return storedUser;
+    }
+    throw new Error('No authenticated user found');
+  }
+
+  // If no API configured, return stored user
+  if (!authAPI) {
     const storedUser = getStoredUser();
     if (storedUser) {
       return storedUser;
