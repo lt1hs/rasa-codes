@@ -43,8 +43,8 @@ const MediaLibrary: React.FC = () => {
 
   // Helper function to validate and clean image URLs
   const getValidImageUrl = (url: string, title: string) => {
-    // Check if URL is a blob URL or invalid
-    if (!url || url.startsWith('blob:') || url.includes('localhost')) {
+    // Check if URL is a blob URL or localhost (but allow picsum.photos and other valid URLs)
+    if (!url || url.startsWith('blob:') || url.includes('localhost:')) {
       return `https://via.placeholder.com/400x300/374151/9CA3AF?text=${encodeURIComponent(title || 'No Image')}`;
     }
     return url;
@@ -89,11 +89,16 @@ const MediaLibrary: React.FC = () => {
     try {
       for (const file of Array.from(files)) {
         if (file.type.startsWith('image/')) {
-          // Create a simple gallery item without blob URL
+          // Generate a realistic mock image URL
+          const imageId = Math.random().toString(36).substr(2, 9);
+          const mockImageUrl = `https://picsum.photos/400/300?random=${imageId}`;
+          
+          // Create a simple gallery item with realistic mock URL
           const newItem = {
             title: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
             description: `Uploaded image: ${file.name}`,
-            image_url: `https://via.placeholder.com/400x300?text=${encodeURIComponent(file.name)}`, // Placeholder until real upload
+            image_url: mockImageUrl,
+            thumbnail_url: `https://picsum.photos/200/150?random=${imageId}`,
             alt_text: file.name,
             category: 'uploads',
             tags: ['upload'],
