@@ -7,7 +7,7 @@ import {
   ROLE_PERMISSIONS,
   Role 
 } from '../types/auth.types';
-import { supabaseClient as supabase } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 
 // Mock API base URL - replace with actual API endpoint
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';

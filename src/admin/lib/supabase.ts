@@ -5,10 +5,10 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 // Validate environment variables
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('⚠️ Supabase credentials not configured. Using mock mode.');
+  console.warn('⚠️ Supabase credentials not configured. Admin will use mock mode.');
 }
 
-// Create client with fallback for development
+// Create client - always create a client, even if credentials are missing
 export const supabase = supabaseUrl && supabaseAnonKey 
   ? createClient(supabaseUrl, supabaseAnonKey, {
       auth: {
@@ -19,37 +19,11 @@ export const supabase = supabaseUrl && supabaseAnonKey
     })
   : null;
 
-// Mock client for development when Supabase is not configured
-const mockClient = {
-  from: () => ({
-    select: () => Promise.resolve({ data: [], error: null }),
-    insert: () => Promise.resolve({ data: null, error: null }),
-    update: () => Promise.resolve({ data: null, error: null }),
-    delete: () => Promise.resolve({ error: null }),
-    eq: function() { return this; },
-    single: function() { return this; },
-    order: function() { return this; },
-    limit: function() { return this; },
-    range: function() { return this; }
-  }),
-  auth: {
-    getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-    getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-    signUp: () => Promise.resolve({ data: { user: null }, error: null }),
-    signIn: () => Promise.resolve({ data: { user: null }, error: null }),
-    signOut: () => Promise.resolve({ error: null })
-  },
-  storage: {
-    from: () => ({
-      upload: () => Promise.resolve({ data: null, error: null }),
-      getPublicUrl: () => ({ data: { publicUrl: '' } }),
-      remove: () => Promise.resolve({ error: null })
-    })
-  }
-};
+// Export for backward compatibility
+export const supabaseClient = supabase;
 
-// Export the client or mock
-export const supabaseClient = supabase || mockClient;
+// Default export
+export default supabase;
 
 // Database types (same as before)
 export interface Database {
