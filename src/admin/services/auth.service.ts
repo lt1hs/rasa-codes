@@ -19,21 +19,25 @@ const authAPI = API_BASE_URL ? axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-}) : null;
+}) : axios.create({
+  baseURL: 'https://mock.api.com', // Mock base URL to prevent null errors
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
 
 // Request interceptor to add auth token
-if (authAPI) {
-  authAPI.interceptors.request.use(
-    (config) => {
-      const token = getStoredToken();
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    },
-    (error) => Promise.reject(error)
-  );
-}
+authAPI.interceptors.request.use(
+  (config) => {
+    const token = getStoredToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 // Response interceptor to handle token refresh
 authAPI.interceptors.response.use(
@@ -226,7 +230,7 @@ export const logout = async (): Promise<void> => {
   
   try {
     // Call logout endpoint to invalidate tokens on server
-    if (refreshToken && !import.meta.env.DEV && authAPI) {
+    if (refreshToken && !import.meta.env.DEV && API_BASE_URL) {
       await authAPI.post('/auth/logout', { refreshToken });
     }
   } catch (error) {
@@ -248,7 +252,7 @@ export const getCurrentUser = async (): Promise<User> => {
   }
 
   // If no API configured, return stored user
-  if (!authAPI) {
+  if (!API_BASE_URL) {
     const storedUser = getStoredUser();
     if (storedUser) {
       return storedUser;
